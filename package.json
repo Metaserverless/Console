@@ -1,0 +1,70 @@
+{
+  "name": "metarhia",
+  "version": "2.0.1",
+  "author": "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
+  "description": "Metarhia Application Example",
+  "license": "MIT",
+  "keywords": [
+    "metarhia",
+    "starter",
+    "kit",
+    "cloud",
+    "impress",
+    "nodejs",
+    "example",
+    "websocket",
+    "api",
+    "application",
+    "server",
+    "rpc",
+    "soa",
+    "service",
+    "stateful",
+    "rest",
+    "restful",
+    "web",
+    "framework",
+    "router",
+    "routing",
+    "cluster",
+    "cache",
+    "http",
+    "https",
+    "websockets"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/metarhia/Example"
+  },
+  "bugs": {
+    "url": "https://github.com/metarhia/Example/issues"
+  },
+  "homepage": "https://github.com/metarhia/Example",
+  "main": "server.js",
+  "types": "types/global.d.ts",
+  "scripts": {
+    "test": "npm run lint && npm run types && node test/system.js",
+    "types": "tsc",
+    "lint": "eslint . && prettier -c \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/*.yml\" \"**/*.ts\"",
+    "fmt": "prettier --write \"**/*.js\" \"**/*.json\" \"**/*.md\" \"**/*.yml\" \"**/*.ts\"",
+    "db": "metasql c"
+  },
+  "engines": {
+    "node": "^12.9 || 14 || 16 || 17"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.34",
+    "@types/pg": "^8.6.0",
+    "@types/ws": "^8.2.0",
+    "eslint": "^8.15.0",
+    "metatests": "^0.8.2",
+    "prettier": "^2.6.2",
+    "typescript": "^4.6.4"
+  },
+  "dependencies": {
+    "impress": "^2.6.10",
+    "metasql": "^2.0.3",
+    "pg": "^8.7.3",
+    "redis": "^4.1.0"
+  }
+}
