@@ -2,7 +2,7 @@
   "name": "metarhia",
   "version": "2.0.1",
   "author": "Timur Shemsedinov <timur.shemsedinov@gmail.com>",
-  "description": "Metarhia Application Example",
+  "description": "Metarhia IDE",
   "license": "MIT",
   "keywords": [
     "metarhia",
@@ -54,8 +54,8 @@
   },
   "devDependencies": {
     "@types/node": "^17.0.34",
-    "@types/pg": "^8.6.0",
-    "@types/ws": "^8.2.0",
+    "@types/pg": "^8.6.5",
+    "@types/ws": "^8.5.3",
     "eslint": "^8.15.0",
     "metatests": "^0.8.2",
     "prettier": "^2.6.2",
@@ -63,6 +63,7 @@
   },
   "dependencies": {
     "impress": "^2.6.10",
+    "lowscript": "^0.0.5",
     "metasql": "^2.0.3",
     "pg": "^8.7.3",
     "redis": "^4.1.0"

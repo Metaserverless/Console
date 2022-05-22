@@ -1,7 +1,7 @@
 ({
-  name: 'example',
-  description: 'Example database schema',
-  version: 4,
+  name: 'demo',
+  description: 'B-OS Process Runtime Demo',
+  version: 1,
   driver: 'pg',
 
   authors: [
