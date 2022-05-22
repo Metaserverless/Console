@@ -1,4 +1,6 @@
-import { Metacom } from './metacom.js';
+import {
+  Metacom
+} from './metacom.js';
 
 const ALPHA_UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const ALPHA_LOWER = 'abcdefghijklmnopqrstuvwxyz';
@@ -51,11 +53,13 @@ for (const keyName in KEY_CODE) KEY_NAME[KEY_CODE[keyName]] = keyName;
 
 const pad = (padChar, length) => new Array(length + 1).join(padChar);
 
-const { userAgent } = navigator;
+const {
+  userAgent
+} = navigator;
 
 const isMobile = () =>
   userAgent.match(/Android/i) ||
-  userAgent.match(/webOS/i) ||
+  userAgent.match(/weconsole/i) ||
   userAgent.match(/iPhone/i) ||
   userAgent.match(/iPad/i) ||
   userAgent.match(/iPod/i) ||
@@ -86,7 +90,11 @@ const followLink = async (event) => {
     return;
   }
   const name = url.substring(0, url.length - '.md'.length);
-  const { text } = await api.console.content({ name });
+  const {
+    text
+  } = await api.console.content({
+    name
+  });
   application.print(text);
 };
 
@@ -194,7 +202,10 @@ const keyboardClick = (e) => {
 const uploadFile = (file, done) => {
   blobToBase64(file).then((url) => {
     const data = url.substring(url.indexOf(',') + 1);
-    api.example.uploadFile({ name: file.name, data }).then(done);
+    api.example.uploadFile({
+      name: file.name,
+      data
+    }).then(done);
   });
 };
 
@@ -445,7 +456,9 @@ class Application {
       upload();
     } else if (args[0] === 'download') {
       const packet = await api.example.downloadFile();
-      console.log({ packet });
+      console.log({
+        packet
+      });
       saveFile('fileName', packet);
     } else if (args[0] === 'counter') {
       const packet = await api.example.counter();
@@ -462,18 +475,49 @@ window.addEventListener('load', async () => {
   const token = localStorage.getItem('metarhia.session.token');
   let logged = false;
   if (token) {
-    const res = await api.auth.restore({ token });
+    const res = await api.auth.restore({
+      token
+    });
     logged = res.status === 'logged';
   }
   if (!logged) {
-    const res = await api.auth.signin({ login: 'marcus', password: 'marcus' });
+    const res = await api.auth.signin({
+      login: 'marcus',
+      password: 'marcus'
+    });
     if (res.token) {
       localStorage.setItem('metarhia.session.token', res.token);
     }
   }
-  const { text } = await api.console.content({ name: 'home' });
-  application.print(text);
-  commandLoop();
+
+  // console.log(window.api);
+
+  window.api.console.on('error', (error) => {
+    console.log(error);
+  });
+
+  window.api.console.on('step', (step) => {
+    console.log(JSON.stringify(step));
+  });
+
+  window.api.console.on('notify', (notify) => {
+    console.log(JSON.stringify(notify));
+    alert(notify.step);
+  });
+
+  window.api.console.on('invoke', (invoke) => {
+    console.log(JSON.stringify(invoke));
+  });
+
+  window.dm.initTransport(window.api);
+
+  // const {
+  //   text
+  // } = await api.console.content({
+  //   name: 'home'
+  // });
+  // // application.print(text);
+  // commandLoop();
 });
 
 if (navigator.serviceWorker) {

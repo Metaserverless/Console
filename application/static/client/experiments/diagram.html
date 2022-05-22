@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>B-OS Diagram Test</title>
+  <link rel="icon" href="/favicon.png" sizes="any" type="image/png">
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="connect-src 'self' wss:">
+
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/3.4.4/joint.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jointjs/3.4.4/joint.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dagre/0.8.5/dagre.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/graphlib/2.1.8/graphlib.min.js"></script>
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+
+      background:#424143;
+      font-family: Roboto, Arial, Helvetica, sans-serif;
+      color:#ffffff;
+    }
+    #app{
+        width: 100%;
+        height: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        /* justify-content: center;
+        align-items: center; */
+    }
+    #diagram-paper{
+      box-sizing: border-box;
+      /* border: 1px solid #E2E2E2; */
+      background-color: #000000;
+      overflow: hidden;
+      width:100%;
+      flex-grow: 1;
+  }
+
+  </style>
+
+</head>
+    <body>
+      <div id="app">
+         <div id="diagram-paper"></div>
+
+
+      </div>
+      <script>
+
+
+const descriptions = {
+  instance: {
+    z: 1,
+    // size: { width: 250, height: 120 },
+    attrs: {
+      body: {
+        refWidth: '100%',
+        refHeight: '100%',
+        strokeWidth: 2,
+      },
+      toggleButton: {
+        refDx: -20,
+        cursor: 'pointer',
+        event: 'group:toggle:button:pointerdown',
+        title: 'Collapse / Expand',
+      },
+      toggleButtonBorder: {
+        fill: 'transparent',
+        strokeWidth: 2,
+        width: '20',
+        height: '20',
+      },
+      toggleButtonIcon: {
+        fill: 'none',
+        strokeWidth: 2,
+      },
+      label: {
+        textVerticalAnchor: 'middle',
+        textAnchor: 'middle',
+        fontSize: 14,
+        whiteSpace: 'pre',
+        x: 'calc(0.5*w)',
+        y: 'calc(0.5*h)',
+      },
+    },
+  },
+  class: {
+    markup: [
+      {
+        tagName: 'rect',
+        selector: 'body',
+      },
+      {
+        tagName: 'g',
+        selector: 'toggleButton',
+        children: [
+          {
+            tagName: 'rect',
+            selector: 'toggleButtonBorder',
+          },
+          {
+            tagName: 'path',
+            selector: 'toggleButtonIcon',
+          },
+        ],
+      },
+      {
+        tagName: 'text',
+        selector: 'label',
+      },
+    ],
+
+    lastPosition: null,
+    children: [],
+    // childrenLinks:[],
+    links: {},
+
+    toggle: function (shouldCollapse) {
+      // console.log('toggle');
+      // console.error('shouldCollapse', shouldCollapse);
+      var buttonD;
+      var collapsed =
+        shouldCollapse === undefined ? !this.get('collapsed') : shouldCollapse;
+
+      if (collapsed) {
+        // this.toggleEmbeddedLinks(collapsed);
+        // this.toggleEmbeddedCells(collapsed);
+
+        // buttonD = 'M 2 7 12 7 M 7 2 7 12';
+        buttonD = 'M 4 10 16 10 M 10 4 10 16';
+
+        // console.log(this.links)
+      } else {
+        // this.toggleEmbeddedCells(collapsed);
+        //  this.toggleEmbeddedLinks(collapsed);
+
+        buttonD = 'M 4 10 16 10';
+      }
+      // this.toggleSize(collapsed);
+      this.attr(['toggleButtonIcon', 'd'], buttonD);
+      this.set('collapsed', collapsed);
+    },
+
+    toggleSize: function (collapsed) {
+      let width = 150;
+      // const el = document.querySelector('[model-id="' + this.id + '"]');
+      // if (el) {
+      //   const icon = el.querySelector('[joint-selector="icon"]');
+      //   const header = el.querySelector('[joint-selector="headerText"]');
+      //   const button = el.querySelector('[joint-selector="toggleButton"]');
+      //   if (header) {
+      //     const tspan = header.firstChild;
+
+      //     // width = Math.round(icon.getBoundingClientRect().width + tspan.getBoundingClientRect().width + button.getBoundingClientRect().width);
+      //     width = Math.round(
+      //       44 +
+      //         tspan.getBoundingClientRect().width +
+      //         10 +
+      //         buttonSize +
+      //         (headerHeight - buttonSize) / 2
+      //     );
+      //     // console.log(tspan.getBoundingClientRect().width)
+      //     // header.setAttribute('text-anchor', collapsed ? 'end' : 'start');
+      //   }
+      // }
+      if (collapsed) {
+        this.resize(width, 44);
+      } else {
+        if (this.getEmbeddedCells().length) {
+          this.fitChildren();
+          const size = this.prop('size');
+          if (size.width < width) {
+            this.resize(width, size.height);
+          }
+        } else {
+          this.resize(width, 100);
+        }
+      }
+    },
+
+    toggleEmbeddedLinks: function (collapsed) {
+      if (!this.graph) return;
+      if (collapsed) {
+        this.links = {};
+        let inbound = this.graph.getConnectedLinks(this, {
+          inbound: true,
+          deep: true,
+        });
+        let outbound = this.graph.getConnectedLinks(this, {
+          outbound: true,
+          deep: true,
+        });
+        for (let l of inbound) {
+          // if (l.prop('parent') == this.prop('id')) continue;
+          this.links[l.id] = {
+            source: l.prop('source'),
+            target: l.prop('target'),
+          };
+          l.prop('target', { id: this.prop('id') });
+        }
+
+        for (let l of outbound) {
+          // if (l.prop('parent') == this.prop('id')) continue;
+          this.links[l.id] = {
+            source: l.prop('source'),
+            target: l.prop('target'),
+          };
+          l.prop('source', { id: this.prop('id') });
+        }
+      } else {
+        let links = this.graph.getConnectedLinks(this);
+        // console.log(Object.keys(this.links).length)
+        for (let link of links) {
+          if (!this.links[link.id]) continue;
+          link.prop('source', this.links[link.id].source);
+          link.prop('target', this.links[link.id].target);
+        }
+        this.links = {};
+      }
+    },
+
+    toggleEmbeddedCells: function (collapsed) {
+      if (!this.graph) return;
+      if (collapsed) {
+        this.lastPosition = this.prop('position');
+        // console.log(this.lastPosition);
+        this.children = this.getEmbeddedCells();
+        for (let c of this.children) {
+          if (c.toggle) c.toggle(collapsed);
+        }
+        this.graph.removeCells(this.children);
+      } else {
+        // console.log(this.children.length);
+        let offset = null;
+        if (this.lastPosition) {
+          const pos = this.prop('position');
+          if (pos.x != this.lastPosition.x || pos.y != this.lastPosition.y) {
+            offset = {
+              x: pos.x - this.lastPosition.x,
+              y: pos.y - this.lastPosition.y,
+            };
+            // this.lastPosition = pos;
+          }
+        }
+
+        this.graph.addCells(this.children);
+        for (let cell of this.children) {
+          if (offset) {
+            let pos = cell.prop('position');
+            // console.log(offset, pos)
+            if (pos)
+              cell.prop('position', {
+                x: pos.x + offset.x,
+                y: pos.y + offset.y,
+              });
+          }
+          this.embed(cell);
+        }
+        this.children = [];
+      }
+    },
+
+    isCollapsed: function () {
+      return Boolean(this.get('collapsed'));
+    },
+
+    fitChildren: function () {
+      var padding = 20;
+      // console.log(this.id, this.getEmbeddedCells().length)
+      this.fitEmbeds({
+        padding: {
+          top: padding,
+          left: padding,
+          right: padding,
+          bottom: padding,
+        },
+      });
+    },
+  },
+  static: {},
+};
+
+if (!joint.shapes.html) joint.shapes.html = {};
+if (!joint.shapes.html.BaseElement) {
+  joint.shapes.html.BaseElement = joint.dia.Element.define(
+    'html.BaseElement',
+    descriptions.instance,
+    descriptions.class,
+    descriptions.static
+  );
+}
+const protoElement = new joint.shapes.html.BaseElement();
+
+const BaseElement = {
+  newElement(node) {
+    // console.log(config.size);
+
+    const cell = protoElement.clone();
+    if (node.id) cell.prop('id', node.id);
+    else if (node.index !== undefined) cell.prop('id', 'node' + node.index);
+
+    const colors = {
+      step: '#2f76fe',
+      success: '#cdcdcd',
+      fail: '#e6c456',
+      finalization: '#e6c456',
+    };
+    const width = 150,
+      height = 60;
+    const text = node.name;
+    const type = node.type;
+
+    // console.log(node)
+
+    const wraptext = joint.util.breakText(text, {
+      width: width,
+      height: height,
+    });
+
+    cell.size(width, height);
+    cell.attr(['body', 'fill'], type == 'finalization' ? '#990004' : '#000000');
+    cell.attr(['body', 'stroke'], colors[type]);
+    cell.attr(['label', 'text'], wraptext);
+    cell.attr(['label', 'fill'], colors[type]);
+
+    if (node.body) {
+      cell.set('collapsed', true);
+      cell.attr(['toggleButtonBorder', 'stroke'], colors[type]);
+      cell.attr(['toggleButtonIcon', 'stroke'], colors[type]);
+      cell.attr(['toggleButtonIcon', 'd'], 'M 4 10 16 10 M 10 4 10 16');
+    } else {
+      cell.attr(['toggleButton', 'display'], 'none');
+    }
+    // this.updateCell(config, cell);
+    return cell;
+  },
+
+  updateCell(config, cell) {
+    if (config.size) cell.prop('size', config.size);
+    if (config.attrs) {
+      for (let key in config.attrs) {
+        cell.attr(key, config.attrs[key]);
+      }
+    }
+  },
+};
+
+
+
+
+class baseDiagram {
+  constructor(id, modules) {
+    this.id = id;
+    this.modules = modules;
+
+    const element = document.getElementById(id);
+    if (!element) return console.error('element not found', id);
+
+    this.paper = null;
+    this.graph = null;
+    this.scale = 1;
+    this.origin = { x: 0, y: 0 };
+    this.pan = { x: 0, y: 0 };
+    // this.flow = null;
+
+    const namespace = joint.shapes;
+    const graph = new joint.dia.Graph({}, { cellNamespace: namespace });
+
+    const paper = new joint.dia.Paper({
+      el: element,
+      model: graph,
+      width: '100%',
+      height: '100%',
+      cellViewNamespace: namespace,
+      async: true,
+      frozen: true,
+      preventContextMenu: false,
+      gridSize: 10,
+      drawGrid: true,
+      // sorting: joint.dia.Paper.sorting.NONE,
+      // sorting: joint.dia.Paper.sorting.APPROX,
+
+      //...INPUTS
+
+      //....MOVE
+      interactive: (cellView) => {
+        return {
+          elementMove: false,
+        };
+        // if (cellView.model.get('locked')) {
+        //     return {
+        //          elementMove: false
+        //     };
+        // }
+        // // otherwise
+        // return {
+        //     linkMove: false
+        // };
+      },
+
+      //....PORTS AND LINKS
+      // linkPinning: false, // Prevent link being dropped in blank paper area
+      // defaultLink: (cellView, magnet)=>{return Link.defaultLink(cellView, magnet, this.defs.gradients.link)},
+      // defaultLink: (cellView, magnet)=>{return Link.defaultLink(cellView, magnet)},
+      defaultConnectionPoint: { name: 'boundary' },
+
+      //....GROUPS
+      viewport: (cellView) => {
+        var element = cellView.model;
+        //  console.log(element.id, element.getAncestors().length);
+        // Hide any element or link which is embedded inside a collapsed parent (or parent of the parent).
+        var hidden = element.getAncestors().some((ancestor) => {
+          return ancestor.isCollapsed ? ancestor.isCollapsed() : false;
+        });
+        return !hidden;
+      },
+    });
+
+    //..........GROUPS
+
+    paper.on(
+      'group:toggle:button:pointerdown',
+      this.groupToggleButtonPointerdownHandler.bind(this)
+    );
+
+    //..........ZOOM
+
+    paper.on('blank:mousewheel', this.canvasMousewheelHandler.bind(this));
+
+    paper.on('cell:mousewheel', (cellView, e, x, y, delta) => {
+      return this.canvasMousewheelHandler(e, x, y, delta);
+    });
+
+    //..........PAN OR SELECT
+
+    paper.on('blank:pointerdown', this.blankPointerdownHandler.bind(this));
+
+    paper.on('blank:pointerup', this.blankPointerupHandler.bind(this));
+
+    paper.on('blank:pointermove', this.blankPointermoveHandler.bind(this));
+
+    this.graph = graph;
+    this.paper = paper;
+  }
+
+  //...........UPDATE ELEMENTS AND LINKS
+
+  updateGraph(flow) {
+    // console.log(flow)
+    this.paper.freeze();
+    this.graph.clear();
+    let cells = [],
+      main,
+      previous,
+      node,
+      element,
+      link,
+      pair;
+
+    if (!flow[0] || !flow[0].body) {
+      console.error('flow is empty');
+      this.paper.unfreeze();
+      return;
+    }
+
+    const types = ['success', 'fail', 'finalization'];
+
+    for (let step of flow[0].body) {
+      //{command: 'Form "Order"', success: Array(0), fail: Array(0), finalization: Array(0)}
+
+      for (let type of types) {
+        for (let command of step[type]) {
+          pair = this.createElementAndLink(
+            type,
+            { command, embeds: this.findEmbeds(flow, command) },
+            previous
+          );
+          cells.push(pair.element);
+          if (pair.link) cells.push(pair.link);
+        }
+        if (type == 'success') {
+          pair = this.createElementAndLink(
+            'main',
+            {
+              command: step.command,
+              embeds: this.findEmbeds(flow, step.command),
+            },
+            previous
+          );
+          main = pair.element;
+          cells.push(pair.element);
+          if (pair.link) cells.push(pair.link);
+        }
+      }
+      previous = main;
+    }
+    this.graph.addCells(cells);
+
+    this.directedGraph();
+    this.paper.unfreeze();
+    document.dispatchEvent(
+      new CustomEvent('diagram.header.change', { detail: flow[0].name })
+    );
+  }
+
+  findEmbeds(flow, command) {
+    for (let i = 1; i < flow.length; i++) {
+      if (command == flow[i].name) {
+        // console.log(command, flow[i].name)
+        return flow[i].body;
+      }
+    }
+    return null;
+  }
+
+  createElementsANdLinks() {}
+
+  createElementAndLink(type, node, previous) {
+    const element = this.createElement(type, node);
+    // if (type == 'main') console.log(node)
+    const link = previous ? this.createLink(type, previous, element) : null;
+    return { element, link };
+  }
+
+  createElement(type, node) {
+    const colors = {
+      main: '#2f76fe',
+      success: '#cdcdcd',
+      fail: '#e6c456',
+      finalization: '#e6c456',
+    };
+    const width = 150,
+      height = 60;
+    const text = node.command;
+
+    // console.log(node)
+
+    const wraptext = joint.util.breakText(text, {
+      width: width,
+      height: height,
+    });
+
+    const options = {
+      z: 1,
+      size: { width, height },
+      attrs: {
+        body: {
+          fill: type == 'finalization' ? '#990004' : '#000000',
+          stroke: colors[type],
+          strokeWidth: 2,
+        },
+        label: {
+          text: wraptext,
+          fill: colors[type],
+        },
+      },
+    };
+
+    if (node.embeds) {
+      // console.log(node.embeds);
+
+      options.attrs.toggleButton = {
+        refDx: -20,
+        // refDx: (- buttonSize * 2 - (headerHeight - buttonSize) / 2) - 5,
+        // refY: 0,
+        cursor: 'pointer',
+        event: 'group:toggle:button:pointerdown',
+        title: 'Collapse / Expand',
+      };
+
+      options.attrs.toggleButtonBorder = {
+        fill: 'transparent',
+        stroke: colors[type],
+        strokeWidth: 2,
+        width: '20',
+        height: '20',
+        class: 'embeds-button',
+      };
+      options.attrs.toggleButtonIcon = {
+        stroke: colors[type],
+        strokeWidth: 2,
+        d: 'M 4 10 16 10 M 10 4 10 16', //'M 4 14 16 14'
+      };
+
+      options.markup = [
+        {
+          tagName: 'rect',
+          selector: 'body',
+        },
+        {
+          tagName: 'g',
+          selector: 'toggleButton',
+          children: [
+            {
+              tagName: 'rect',
+              selector: 'toggleButtonBorder',
+            },
+            {
+              tagName: 'path',
+              selector: 'toggleButtonIcon',
+            },
+          ],
+        },
+        {
+          tagName: 'text',
+          selector: 'label',
+        },
+      ];
+    }
+
+    const element = new joint.shapes.standard.Rectangle(options);
+    element.prop('data', node);
+
+    return element;
+  }
+
+  createLink(type, source, target) {
+    const colors = {
+      main: '#2f76fe',
+      success: '#00e60a',
+      fail: '#ff1a00',
+      finalization: '#ff1a00',
+    };
+    const link = new joint.shapes.standard.Link({
+      z: 0,
+      source: source,
+      target: target,
+      attrs: {
+        line: {
+          stroke: colors[type],
+          'stroke-width': 2,
+        },
+      },
+    });
+    return link;
+  }
+
+  directedGraph(cells) {
+    const graphBBox = joint.layout.DirectedGraph.layout(cells || this.graph, {
+      nodeSep: 50,
+      edgeSep: 80,
+      marginX: 50,
+      marginY: 50,
+      rankDir: 'LR',
+      resizeClusters: true,
+      clusterPadding: { left: 10, right: 10, top: 54, bottom: 10 },
+      dagre,
+      graphlib,
+      // ranker: 'longest-path',
+      // ranker: 'tight-tree',
+      ranker: 'network-simplex',
+    });
+
+    // console.log('x:', graphBBox.x, 'y:', graphBBox.y)
+    // console.log('width:', graphBBox.width, 'height:', graphBBox.height);
+  }
+
+
+
+  //..........ZOOM
+
+  canvasMousewheelHandler(e, x, y, delta) {
+    e.preventDefault();
+
+    const oldScale = this.paper.scale().sx;
+    const newScale = oldScale + delta * 0.1;
+
+    this.scaleToPoint(newScale, x, y);
+
+    return false;
+  }
+
+  scaleToPoint(nextScale, x, y) {
+    const MIN_SCALE = 0.2;
+    const MAX_SCALE = 4;
+    if (nextScale >= MIN_SCALE && nextScale <= MAX_SCALE) {
+      const currentScale = this.paper.scale().sx;
+
+      const beta = currentScale / nextScale;
+
+      const ax = x - x * beta;
+      const ay = y - y * beta;
+
+      const translate = this.paper.translate();
+
+      this.pan.x = translate.tx - ax * nextScale;
+      this.pan.y = translate.ty - ay * nextScale;
+      // const nextTx = translate.tx - ax * nextScale;
+      // const nextTy = translate.ty - ay * nextScale;
+
+      this.paper.translate(this.pan.x, this.pan.y);
+
+      const ctm = this.paper.matrix();
+
+      ctm.a = nextScale;
+      ctm.d = nextScale;
+
+      this.paper.matrix(ctm);
+      this.paper.drawGrid();
+      this.scale = nextScale;
+
+      // const event = new CustomEvent('diagram.scale.change', { scale: nextScale });
+      document.dispatchEvent(
+        new CustomEvent(this.id + ':scale:change', { detail: nextScale })
+      );
+      // this.updateScale(nextScale);
+    }
+  }
+
+  //.......PAN
+
+  blankPointerdownHandler(evt, x, y) {
+    const scale = this.paper.scale();
+    this.origin.x = x * scale.sx;
+    this.origin.y = y * scale.sy;
+
+    this.paper.el.classList.add('cursor-grabbing');
+    return false;
+  }
+
+  blankPointerupHandler(evt, x, y) {
+    this.paper.el.classList.remove('cursor-grabbing');
+    return false;
+  }
+
+  blankPointermoveHandler(evt, x, y) {
+    //  console.log(x, this.origin.x, y, this.origin.y, evt.offsetX);
+    // console.log(evt)// c    onsole.log('blank:pointermove')
+
+    x = evt.offsetX;
+    y = evt.offsetY;
+
+    if (
+      this.origin.x &&
+      this.origin.y &&
+      (x != this.origin.x || y != this.origin.y)
+    ) {
+      this.pan.x = x - this.origin.x;
+      this.pan.y = y - this.origin.y;
+      this.paper.translate(this.pan.x, this.pan.y);
+    }
+
+    return false;
+  }
+
+//......GROUPS
+
+groupToggleButtonPointerdownHandler(elementView) {
+    const parent = elementView.model;
+    const data = parent.prop('data');
+    if (!data || !data.body) return;
+
+    // this.modules.events.emit(this.id + ':group:toggle', data);
+
+    // console.log(data.id);
+    // console.log('groupToggleButtonPointerdownHandler', data);
+    // const steps = [];
+
+    // this.modules.dialogs.alert(
+    //   '<ol class="flow-diagram-embeds-list">' +
+    //     data.body
+    //       .map((e) => `<li>${e.name.replaceAll('`', '')}</li>`)
+    //       .join('') +
+    //     '</ol>',
+    //   { title: data.name, buttons: { ok: true } }
+    // );
+
+    // this.deselectAllElements();
+
+    // this.paper.freeze();
+    // const children = parent.children;
+    // // console.log(element, children)
+
+    // if (!children.length) {
+    //   const res = this.createElementsAndLinks(data.body);
+    //   const {elements, links} = res;
+    //   // console.log(data.body);
+    //   // console.log(res)
+    //   // console.log(element)
+    //   //  console.log(cells)
+    //   //  console.log(links)
+
+    //    this.graph.addCells(elements);
+    //    this.graph.addCells(links);
+
+    //   // for (let child of elements) {
+    //   //   element.embed(child);
+    //   // }
+    //   // for (let link of links) {
+    //   //    link.reparent();
+    //   // }
+    //   parent.children = elements;
+
+    //   this.resizeParent(parent, elements, links)
+    //   // this.directedGraph(elements);
+    //   // element.toggle(false);
+    // }
+
+    // parent.toggle();
+    // // this.fitAncestors(parent);
+    // // this.directedGraph();
+    // this.paper.unfreeze();
+  }
+
+  // resizeParent(parent, elements, links){
+  //     // const cells = elements.concat(links);
+  //     this.directedGraph(elements);
+  //     const clone = parent.clone();
+  //     this.graph.addCell(clone);
+  //     for (let element of elements) {
+  //         clone.embed(element);
+  //     }
+  //     clone.fitEmbeds({padding: { top: 30, left: 10, right: 10, bottom: 10 }});
+  //     parent.resize(clone.getBBox().width, clone.getBBox().height);
+  //     this.directedGraph();
+  //     const dx = parent.getBBox().x - clone.getBBox().x;
+  //     const dy = parent.getBBox().y - clone.getBBox().y;
+  //     clone.translate(dx, dy);
+  //     clone.remove();
+  //     for (let element of elements) {
+  //       parent.embed(element);
+  //     }
+  //     for (let link of links) {
+  //       link.reparent();
+  //     }
+
+  // }
+
+  // expandEmbeds(element) {
+  //   const embeds = element.prop('data').body;
+  // }
+
+  // expandEmbeds2(element) {
+  //   const embeds = element.prop('data').body;
+  // }
+
+  // fitAncestors(element) {
+  //   element.getAncestors().forEach((container) => {
+  //     // console.log(container.id)
+  //     if (container.fitChildren && !container.get('collapsed'))
+  //       container.fitChildren();
+  //   });
+  // }
+
+
+}
+
+
+     const diagram = new baseDiagram('diagram-paper', {})
+
+
+     </script>
+</body>
+</html>

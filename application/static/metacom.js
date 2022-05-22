@@ -1,4 +1,6 @@
-import { EventEmitter } from './events.js';
+import {
+  EventEmitter
+} from './events.js';
 
 const CALL_TIMEOUT = 7 * 1000;
 const PING_INTERVAL = 60 * 1000;
@@ -13,7 +15,10 @@ window.addEventListener('online', () => {
 });
 
 class MetacomError extends Error {
-  constructor({ message, code }) {
+  constructor({
+    message,
+    code
+  }) {
     super(message);
     this.code = code;
   }
@@ -57,7 +62,9 @@ export class Metacom extends EventEmitter {
   }
 
   static create(url, options) {
-    const { transport } = Metacom;
+    const {
+      transport
+    } = Metacom;
     const Transport = url.startsWith('ws') ? transport.ws : transport.http;
     return new Transport(url, options);
   }
@@ -90,12 +97,22 @@ export class Metacom extends EventEmitter {
       if (callType === 'event') {
         const [interfaceName, eventName] = target.split('/');
         const metacomInterface = this.api[interfaceName];
+        // console.log(interfaceName, eventName, this.api)
         metacomInterface.emit(eventName, args);
       }
       if (callType === 'stream') {
-        const { name, size, status } = packet;
+        const {
+          name,
+          size,
+          status
+        } = packet;
         if (name) {
-          const stream = { name, size, chunks: [], received: 0 };
+          const stream = {
+            name,
+            size,
+            chunks: [],
+            received: 0
+          };
           this.streams.set(callId, stream);
           return;
         }
@@ -104,7 +121,9 @@ export class Metacom extends EventEmitter {
           this.streams.delete(callId);
           const blob = new Blob(stream.chunks);
           blob.text().then((text) => {
-            console.log({ text });
+            console.log({
+              text
+            });
           });
           return;
         }
@@ -145,7 +164,10 @@ export class Metacom extends EventEmitter {
             }
           }, this.callTimeout);
           this.calls.set(callId, [resolve, reject]);
-          const packet = { call: callId, [target]: args };
+          const packet = {
+            call: callId,
+            [target]: args
+          };
           this.send(JSON.stringify(packet));
         });
       };
@@ -161,7 +183,9 @@ class WebsocketTransport extends Metacom {
     this.socket = socket;
     connections.add(this);
 
-    socket.addEventListener('message', ({ data }) => {
+    socket.addEventListener('message', ({
+      data
+    }) => {
       if (typeof data === 'string') {
         this.message(data);
         return;
@@ -231,10 +255,14 @@ class HttpTransport extends Metacom {
     this.lastActivity = new Date().getTime();
     fetch(this.url, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: data,
     }).then((res) => {
-      const { status } = res;
+      const {
+        status
+      } = res;
       if (status === 200) {
         return res.text().then((packet) => {
           if (packet.error) throw new MetacomError(packet.error);
