@@ -43,9 +43,14 @@ class controllerActivityBar {
         action: 'versioning',
       },
       {
-        text: 'Debugging',
+        text: 'Test & Debug',
         icon: 'fas fa-bug',
         action: 'debugging',
+      },
+      {
+        text: 'Extensions',
+        icon: 'fas fa-th-large',
+        action: 'extensions',
       },
       {
         text: 'Templates',

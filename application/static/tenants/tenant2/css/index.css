@@ -1,0 +1,14 @@
+.header1 {
+  position: fixed;
+  top: 0;
+  min-height: 2rem;
+  background: lightblue;
+}
+.footer1 {
+  position: fixed;
+  bottom: 0;
+  min-height: 2rem;
+  background: lightblue;
+}
+.element1 {
+}

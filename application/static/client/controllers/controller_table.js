@@ -56,9 +56,10 @@ class controllerTable {
     this.elements.entityTableHeader.innerHTML = '';
     this.elements.entityTableBody.innerHTML = '';
     const data = await this.modules.transport.send(
-      method,
-      { [id]: '>0' },
-      true
+      method, {
+        [id]: '>0'
+      },
+      'store'
     );
     if (!data || !data.result) return console.error('no data', data);
     if (!data.result.length) {
@@ -69,14 +70,14 @@ class controllerTable {
     const header =
       '<tr>' +
       Object.keys(data.result[0])
-        .map((key) => `<th>${key}</th>`)
-        .join('') +
+      .map((key) => `<th>${key}</th>`)
+      .join('') +
       '</tr>';
     this.elements.entityTableHeader.innerHTML = header;
     const body = data.result
       .map(
         (row) =>
-          `<tr>${Object.values(row)
+        `<tr>${Object.values(row)
             .map((value) => `<td>${value}</td>`)
             .join('')}</tr>`
       )

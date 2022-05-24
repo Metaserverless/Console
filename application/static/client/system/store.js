@@ -1,5 +1,5 @@
 /* eslint-disable */
-// import parser from './parser.js';
+const _ = window._;
 
 const store = {
   data: {
@@ -9,14 +9,25 @@ const store = {
 
   init() {},
 
-  set(name, value) {
-    this.data[name] = value;
-    localStorage.setItem(name, value);
+  set(path, value, local = false) {
+    _.set(this.data, path, value);
+    if (local) {
+      if (typeof value === 'object') value = JSON.stringify(value);
+      localStorage.setItem(path, value);
+    }
   },
-  get(name) {
-    if (typeof this.data[name] === 'undefined')
-      return localStorage.getItem(name);
-    return this.data[name];
+
+  get(path, local = false) {
+    let value = _.get(this.data, path)
+    if (local && typeof value === 'undefined') {
+      value = localStorage.getItem(path);
+      if (typeof value !== 'undefined') {
+        value = JSON.parse(value);
+        _.set(this.data, path, value);
+      }
+    }
+
+    return value;
   },
 };
 

@@ -4,6 +4,8 @@ import events from './system/events.js';
 import transport from './system/transport.js';
 import store from './system/store.js';
 import router from './system/router.js';
+import keyboard from './system/keyboard.js';
+import sources from './system/sources.js';
 import dialogs from './system/dialogs.js';
 import Tooltip from './system/tooltip.js';
 
@@ -28,7 +30,7 @@ const modules = {
   transport,
   store,
   router,
-  dialogs
+  dialogs,
 };
 
 const dm = {
@@ -55,7 +57,8 @@ const dm = {
 
   async init() {
     // this.initControls();
-
+    keyboard.init();
+    sources.init(this.modules);
     dialogs.init();
     this.tooltip = new Tooltip();
 
@@ -95,7 +98,11 @@ const dm = {
     //   console.log(ast)
     //   const sql = parser.sqlify(ast)
     //   console.log(sql)
+
+
   },
+
+
 
   initTransport(api) {
     transport.init(api);

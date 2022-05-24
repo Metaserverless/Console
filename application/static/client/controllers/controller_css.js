@@ -44,7 +44,7 @@ code {
 
     this.codeEditor = new BaseCodeEditor(id, modules, {
       mode: 'text/css',
-      value,
+      value: '',
     });
   }
 }

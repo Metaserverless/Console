@@ -4,6 +4,8 @@
   --main-text-color: white;
   --light-green-color: #00ff00; /*#00e60a */
   --dark-green-color: #009900; /*#038f0a*/
+  --light-yellow-color: #ffff00; /*#ffd200*/
+  --light-orange-color: #ffbc5a;
   --light-red-color: #ff0000; /*#ff0000*/
   --main-border: 1px solid rgb(205, 205, 205, 0.2);
   --tooltip-bg-color: #000000;
@@ -233,14 +235,18 @@ textarea {
 #side-bar-sections {
   position: relative;
   width: 100%;
-  /* height: 100%; */
+  min-height: 100%;
+  /* overflow: auto; */
+  /* max-height: 100%; */
 }
 .side-bar-section {
   position: absolute;
   top: 0;
   width: 100%;
   height: 100%;
+  min-height: 100%;
   display: none;
+  overflow-y: auto;
 }
 
 .side-bar-section.active {
@@ -318,6 +324,10 @@ textarea {
 
 .jstree-default-dark .jstree-anchor.jstree-search {
   color: var(--light-green-color);
+}
+
+.jstree-node.changed .jstree-anchor {
+  color: var(--light-orange-color);
 }
 
 /* END JSTREE */
@@ -575,7 +585,7 @@ table {
   min-height: 30%;
   background: var(--darker-bg-color);
   border-top: var(--main-border);
-  /* display: none; */
+  display: none;
   bottom: 0;
 }
 

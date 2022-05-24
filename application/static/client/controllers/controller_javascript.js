@@ -17,7 +17,7 @@ function myScript(){
 
     this.codeEditor = new BaseCodeEditor(id, modules, {
       mode: 'javascript',
-      value,
+      value: '',
     });
   }
 }

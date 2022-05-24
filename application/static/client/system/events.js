@@ -1,10 +1,10 @@
-/* eslint-disable */
-
 const events = {
   array: [],
 
   emit(name, data) {
-    document.dispatchEvent(new CustomEvent(name, { detail: data }));
+    document.dispatchEvent(new CustomEvent(name, {
+      detail: data
+    }));
   },
 
   listen(name, callback) {

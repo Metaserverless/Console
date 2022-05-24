@@ -30,12 +30,12 @@ class controllerTopHeader {
           },
           {
             title: 'Save file',
-            action: 'save-file',
+            action: 'Ctrl+s',
             shortcut: 'Ctrl+S',
           },
           {
             title: 'Save file as',
-            action: 'save-file-as',
+            action: 'Ctrl+Shift+S',
             shortcut: 'Ctrl+Shift+S',
           },
           {

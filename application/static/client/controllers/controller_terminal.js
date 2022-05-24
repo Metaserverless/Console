@@ -4,10 +4,8 @@ class controllerTerminal {
     this.modules = modules;
     this.elements = {
       terminal: document.getElementById(id),
-
     };
     modules.events.listen('new:terminal', this.newTerminal.bind(this));
-
   }
   newTerminal() {
     // console.log('new terminal');
