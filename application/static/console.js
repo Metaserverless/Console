@@ -93,7 +93,7 @@ const followLink = async (event) => {
   const {
     text
   } = await api.console.content({
-    name
+    name,
   });
   application.print(text);
 };
@@ -202,10 +202,12 @@ const keyboardClick = (e) => {
 const uploadFile = (file, done) => {
   blobToBase64(file).then((url) => {
     const data = url.substring(url.indexOf(',') + 1);
-    api.example.uploadFile({
-      name: file.name,
-      data
-    }).then(done);
+    api.example
+      .uploadFile({
+        name: file.name,
+        data,
+      })
+      .then(done);
   });
 };
 
@@ -457,7 +459,7 @@ class Application {
     } else if (args[0] === 'download') {
       const packet = await api.example.downloadFile();
       console.log({
-        packet
+        packet,
       });
       saveFile('fileName', packet);
     } else if (args[0] === 'counter') {
@@ -471,19 +473,19 @@ class Application {
 window.addEventListener('load', async () => {
   window.application = new Application();
   window.api = window.application.metacom.api;
-  await application.metacom.load('auth', 'console', 'example');
+  await application.metacom.load('auth', 'console', 'store', 'example');
   const token = localStorage.getItem('metarhia.session.token');
   let logged = false;
   if (token) {
     const res = await api.auth.restore({
-      token
+      token,
     });
     logged = res.status === 'logged';
   }
   if (!logged) {
     const res = await api.auth.signin({
       login: 'marcus',
-      password: 'marcus'
+      password: 'marcus',
     });
     if (res.token) {
       localStorage.setItem('metarhia.session.token', res.token);
@@ -497,16 +499,16 @@ window.addEventListener('load', async () => {
   });
 
   window.api.console.on('step', (step) => {
-    console.log(JSON.stringify(step));
+    // console.log(JSON.stringify(step));
   });
 
   window.api.console.on('notify', (notify) => {
-    console.log(JSON.stringify(notify));
+    // console.log(JSON.stringify(notify));
     alert(notify.step);
   });
 
   window.api.console.on('invoke', (invoke) => {
-    console.log(JSON.stringify(invoke));
+    // console.log(JSON.stringify(invoke));
   });
 
   window.dm.initTransport(window.api);

@@ -1,1 +1,4 @@
 application/tasks/
+application/flow/
+application/static/client/vendors/
+application/static/client/system/temp_data.js

@@ -1,12 +1,10 @@
 ({
   access: 'public',
 
-  async method({
-    name
-  }) {
+  async method({ name }) {
     return {
       name,
-      success: true
+      success: true,
     };
   },
 });

@@ -1,6 +1,5 @@
 export default {
-
-  getTrees() {
+  getTrees2() {
     return {
       server: [{
           id: 'flow',
@@ -12,7 +11,7 @@ export default {
             kind: 'flow',
             text: 'Store.md',
             type: 'flow',
-          }],
+          }, ],
         },
         {
           id: 'schemas',
@@ -121,7 +120,7 @@ export default {
             kind: 'rpc',
             text: 'rpc1.js',
             type: 'js',
-          }],
+          }, ],
         },
         {
           id: 'config',
@@ -175,8 +174,7 @@ export default {
                 kind: 'css',
                 system: true,
                 text: 'index.css',
-                type: 'css'
-
+                type: 'css',
               }, ],
             },
             {
@@ -216,7 +214,7 @@ export default {
               id: 'footer1.html',
               kind: 'component',
               type: 'html',
-              text: 'footer1.html'
+              text: 'footer1.html',
             },
           ],
         },
@@ -243,8 +241,7 @@ export default {
             system: true,
             kind: 'js',
             type: 'js',
-            text: 'router.js'
-
+            text: 'router.js',
           }, ],
         },
 
@@ -273,14 +270,12 @@ export default {
               kind: 'view',
               type: 'html',
               text: 'MainView.html',
-
             },
             {
               id: 'FirstView.html',
               kind: 'view',
               type: 'html',
               text: 'FirstView.html',
-
             },
             {
               id: 'SecondView.html',
@@ -297,7 +292,7 @@ export default {
       mail: [],
       versioning: [],
       debugging: [],
-      templates: []
+      templates: [],
     };
   },
 
@@ -331,9 +326,4 @@ export default {
   //     success: 1
   //   };
   // }
-
-
-
-
-
 };

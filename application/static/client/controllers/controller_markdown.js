@@ -8,21 +8,21 @@ class controllerMarkdown {
     this.elements = {};
 
     const value = `# Foo
-## Bar
+    ## Bar
 
-blah blah
+    blah blah
 
-## Baz
+    ## Baz
 
-blah blah
+    blah blah
 
-# Quux
+    # Quux
 
-blah blah`;
+    blah blah`;
 
     this.codeEditor = new BaseCodeEditor(id, modules, {
       mode: 'markdown',
-      value,
+      value: '',
     });
   }
 }

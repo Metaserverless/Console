@@ -42,13 +42,15 @@ class controllerDiagram {
       plus: /^\s*\+\s*/,
       minus: /^\s*-\s*/,
     }),
-    (this.editingLine = 0);
+      (this.editingLine = 0);
     this.codeEditorShown = true;
     this.autocomleteShown = false;
-    this.processes = [{
-      name: 'Order product',
-      url: 'Store',
-    }, ];
+    this.processes = [
+      {
+        name: 'Order product',
+        url: 'Store',
+      },
+    ];
     this.subprocesses = [];
     this.selectedProcessIndex = 0;
 
@@ -93,7 +95,10 @@ class controllerDiagram {
       this.startFlow.bind(this)
     );
     this.modules.events.listen('console:form', this.form.show.bind(this.form));
-    this.modules.events.listen('console:notify', this.showNotification.bind(this));
+    this.modules.events.listen(
+      'console:notify',
+      this.showNotification.bind(this)
+    );
     this.showCodeEditor(false);
   }
   loadData() {
@@ -131,7 +136,6 @@ class controllerDiagram {
     if (!this.processes[index].data) {
       const url = this.processes[index].url;
       try {
-
         const fetched = await this.modules.transport.send('getFlow', {
           name: url,
         });
@@ -200,10 +204,7 @@ class controllerDiagram {
   }
 
   diagramCodeEditorChanged(data) {
-    const {
-      value,
-      change
-    } = data;
+    const { value, change } = data;
 
     // console.log(value, change)
 
@@ -215,7 +216,10 @@ class controllerDiagram {
     } else {
       this.elements.processSaveButton.removeAttribute('disabled');
       const sameLine = change.from.line == change.to.line;
-      if (change.origin == '+input') {} else if (change.origin == '+delete') {} else if (change.origin == 'paste') {}
+      if (change.origin == '+input') {
+      } else if (change.origin == '+delete') {
+      } else if (change.origin == 'paste') {
+      }
     }
   }
 }

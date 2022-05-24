@@ -4,7 +4,6 @@ import events from './events.js';
 import tempData from './temp_data.js';
 // console.log(tempData);
 
-
 const transport = {
   endpoint: null,
 
@@ -56,8 +55,6 @@ const transport = {
       console.error(e);
     }
   },
-
-
 
   listen(name, callback) {},
 

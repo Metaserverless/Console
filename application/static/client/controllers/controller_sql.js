@@ -9,7 +9,10 @@ class controllerSql {
 
     const value = `SELECT * FROM 'Order';`;
 
-    this.codeEditor = new BaseCodeEditor(id, modules, { mode: 'sql', value });
+    this.codeEditor = new BaseCodeEditor(id, modules, {
+      mode: 'sql',
+      value: ''
+    });
   }
 }
 
