@@ -3,7 +3,8 @@
   --darker-bg-color: #252526;
   --main-text-color: white;
   --light-green-color: #00ff00; /*#00e60a */
-  --dark-green-color: #009900; /*#038f0a*/
+  --dark-blue-color: #009900; /*#038f0a*/
+  --dark-blue-color: #005c99;
   --light-yellow-color: #ffff00; /*#ffd200*/
   --light-orange-color: #ffbc5a;
   --light-red-color: #ff0000; /*#ff0000*/
@@ -276,7 +277,7 @@ textarea {
 .jstree-default-dark .jstree-clicked,
 .jstree-default-dark .jstree-wholerow-clicked {
   /* background: transparent; */
-  background: var(--dark-green-color);
+  background: var(--dark-blue-color);
   /* color: #000000; */
   border-radius: 2px;
   box-shadow: inset 0 0 1px #666666;

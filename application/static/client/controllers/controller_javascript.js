@@ -5,6 +5,7 @@ class controllerJavascript {
   constructor(id, modules) {
     this.id = id;
     this.modules = modules;
+    this.view = 'Javascript';
     this.elements = {};
 
     const value = `/*
@@ -15,7 +16,7 @@ function myScript(){
 }
 \n`;
 
-    this.codeEditor = new BaseCodeEditor(id, modules, {
+    this.codeEditor = new BaseCodeEditor(id, modules, this.view, {
       mode: 'javascript',
       value: '',
     });

@@ -5,6 +5,7 @@ class controllerCss {
   constructor(id, modules) {
     this.id = id;
     this.modules = modules;
+    this.view = 'Css';
     this.elements = {};
 
     const value = `/* Some example CSS */
@@ -42,7 +43,7 @@ code {
 }
 `;
 
-    this.codeEditor = new BaseCodeEditor(id, modules, {
+    this.codeEditor = new BaseCodeEditor(id, modules, this.view, {
       mode: 'text/css',
       value: '',
     });

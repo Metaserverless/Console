@@ -5,6 +5,7 @@ class controllerJson {
   constructor(id, modules) {
     this.id = id;
     this.modules = modules;
+    this.view = 'Json';
     this.elements = {};
 
     const value = `{
@@ -35,7 +36,7 @@ class controllerJson {
       }
     }`;
 
-    this.codeEditor = new BaseCodeEditor(id, modules, {
+    this.codeEditor = new BaseCodeEditor(id, modules, this.view, {
       mode: 'application/ld+json',
       value: '',
     });
