@@ -1,13 +1,14 @@
 /* eslint-disable */
 
 class BaseCodeEditor {
-  constructor(id, modules, config = {}) {
+  constructor(id, modules, view, config = {}) {
     const element = document.getElementById(id);
 
     if (!element) return console.error('element not found');
 
     this.id = id;
     this.modules = modules;
+    this.view = view;
     this.mode = config.mode || 'javascript';
     const theme = this.modules.store.get('CodeMirrorTheme') || 'darcula';
     this.file = null;
@@ -145,6 +146,7 @@ class BaseCodeEditor {
 
   async openFile(file) {
     const extension = file.name.split('.').pop();
+    if (this.view != this.modules.router.activeViewName()) return;
     if (this.mode != this.extensionTypes[extension]) return;
     if (this.file && this.file.name == file.name && this.file.path == file.path) {
       return;

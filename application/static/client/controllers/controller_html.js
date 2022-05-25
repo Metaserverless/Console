@@ -30,7 +30,7 @@ class controllerHtml {
 </body>
 </html>`;
 
-    this.codeEditor = new BaseCodeEditor(id, modules, {
+    this.codeEditor = new BaseCodeEditor(id, modules, 'Html', {
       mode: 'text/html',
       value: '',
     });

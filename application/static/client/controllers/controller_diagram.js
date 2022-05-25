@@ -1,12 +1,13 @@
 /* eslint-disable */
 import parser from '../utilities/flow_parser.js';
 import flowDiagram from '../editors/flowDiagram.js';
-import codeEditor from '../editors/flowMarkdownEditor.js';
+import codeEditor from '../editors/baseCodeEditor.js';
 import form from '../editors/form.js';
 
 class controllerDiagram {
   constructor(id, modules) {
     this.modules = modules;
+    this.view = 'Diagram';
 
     const codeEditorContainer = document.getElementById(
       'diagram-code-editor-container'
@@ -14,7 +15,7 @@ class controllerDiagram {
 
     this.elements = {
       processRunButton: document.getElementById('process-run-button'),
-      processSaveButton: document.getElementById('process-save-button'),
+      // processSaveButton: document.getElementById('process-save-button'),
       paper: document.getElementById('diagram-paper'),
       popup: document.getElementById('flow-diagram-popup'),
       // diagramHeader:document.getElementById('diagram-header'),
@@ -33,28 +34,26 @@ class controllerDiagram {
     this.lines = [];
     this.cleanLines = [];
     this.objects = [];
-    (this.rgs = {
-      empty: /^\s*$/,
-      regular: /^\s+/,
-      number: /^\s*\#\s*/,
-      star: /^\s*\*\s*/,
-      arrow: /^\s*-\s*\>\s*/,
-      plus: /^\s*\+\s*/,
-      minus: /^\s*-\s*/,
-    }),
-      (this.editingLine = 0);
+    // (this.rgs = {
+    //   empty: /^\s*$/,
+    //   regular: /^\s+/,
+    //   number: /^\s*\#\s*/,
+    //   star: /^\s*\*\s*/,
+    //   arrow: /^\s*-\s*\>\s*/,
+    //   plus: /^\s*\+\s*/,
+    //   minus: /^\s*-\s*/,
+    // }),
+    (this.editingLine = 0);
     this.codeEditorShown = true;
     this.autocomleteShown = false;
-    this.processes = [
-      {
-        name: 'Order product',
-        url: 'Store',
-      },
-    ];
-    this.subprocesses = [];
-    this.selectedProcessIndex = 0;
+    // this.processes = [{
+    //   name: 'Order product',
+    //   url: 'Store',
+    // }, ];
+    // this.subprocesses = [];
+    // this.selectedProcessIndex = 0;
 
-    modules.events.listen('transport:initiated', this.loadData.bind(this));
+    // modules.events.listen('transport:initiated', this.loadData.bind(this));
     // const processes = this.processes.map(p=>`<option value="${p.url}">${p.name}</option>`).join('');
     // this.elements.processesSelect.innerHTML = processes;
     // this.elements.processesSelect.addEventListener('change', e=>{this.fetchProcess(this.elements.processesSelect.selectedIndex)})
@@ -74,7 +73,10 @@ class controllerDiagram {
 
     this.form = new form('form_component', modules);
 
-    this.codeEditor = new codeEditor('diagram-code-editor', modules, {});
+    this.codeEditor = new codeEditor('diagram-code-editor', modules, this.view, {
+      mode: 'markdown',
+      value: '',
+    });
 
     this.elements.openBtn.addEventListener('click', () =>
       this.showCodeEditor()
@@ -84,8 +86,10 @@ class controllerDiagram {
     );
 
     this.modules.events.listen(
-      'diagram-code-editor:input:change',
-      this.diagramCodeEditorChanged.bind(this)
+      'code:editor:change',
+      (data) => {
+        if (data.id == 'diagram-code-editor') this.diagramCodeEditorChanged(data)
+      }
     );
 
     // this.initCodeEditor();
@@ -101,12 +105,13 @@ class controllerDiagram {
     );
     this.showCodeEditor(false);
   }
-  loadData() {
-    this.fetchProcess(this.selectedProcessIndex);
-  }
+  // loadData() {
+  //   this.fetchProcess(this.selectedProcessIndex);
+  // }
 
   async startFlow() {
-    const name = this.processes[this.selectedProcessIndex].url;
+    // const name = this.processes[this.selectedProcessIndex].url;
+
     const start = await this.modules.transport.send('startFlow', {
       name: 'Order product',
     });
@@ -125,37 +130,37 @@ class controllerDiagram {
     // this.modules.dialogs.alert(data.step, {title:'Notification'});
   }
 
-  async fetchProcess(index = 0) {
-    // console.log(this)
+  // async fetchProcess(index = 0) {
+  //   // console.log(this)
 
-    // console.log(index);
-    this.selectedProcessIndex = index;
+  //   // console.log(index);
+  //   this.selectedProcessIndex = index;
 
-    //  this.processes[index].data = this.text;
+  //   //  this.processes[index].data = this.text;
 
-    if (!this.processes[index].data) {
-      const url = this.processes[index].url;
-      try {
-        const fetched = await this.modules.transport.send('getFlow', {
-          name: url,
-        });
-        this.processes[index].data = fetched.source;
-        // this.processes[index].data = '';
-      } catch (e) {
-        return console.error(e);
-      }
-    }
-    // this.elements.diagramHeader.innerHTML = this.processes[index].name;
-    this.codeEditor.setValue(this.processes[index].data);
-    // this.elements.codeEditor.value = this.processes[index].data;
+  //   if (!this.processes[index].data) {
+  //     const url = this.processes[index].url;
+  //     try {
+  //       const fetched = await this.modules.transport.send('getFlow', {
+  //         name: url,
+  //       });
+  //       this.processes[index].data = fetched.source;
+  //       // this.processes[index].data = '';
+  //     } catch (e) {
+  //       return console.error(e);
+  //     }
+  //   }
+  //   // this.elements.diagramHeader.innerHTML = this.processes[index].name;
+  //   this.codeEditor.setValue(this.processes[index].data);
+  //   // this.elements.codeEditor.value = this.processes[index].data;
 
-    // this.updateValue(this.processes[index].data);
-    // console.log(this.processes[index].data);
-    // this.updateValue(this.processes[index].data);
-    // this.showCodeEditor(false);
+  //   // this.updateValue(this.processes[index].data);
+  //   // console.log(this.processes[index].data);
+  //   // this.updateValue(this.processes[index].data);
+  //   // this.showCodeEditor(false);
 
-    // console.log(parser.parseScript(this.text));
-  }
+  //   // console.log(parser.parseScript(this.text));
+  // }
 
   diagramShowEmbeds(data) {
     // console.log(this.elements.popup)
@@ -175,19 +180,19 @@ class controllerDiagram {
     // );
   }
 
-  updateValue(text) {
-    console.log(
-      text.length,
-      this.processes[this.selectedProcessIndex].data.length
-    );
-    if (text == this.processes[this.selectedProcessIndex].data)
-      this.elements.processSaveButton.setAttribute('disabled', true);
-    else this.elements.processSaveButton.removeAttribute('disabled');
+  // updateValue(text) {
+  //   console.log(
+  //     text.length,
+  //     this.processes[this.selectedProcessIndex].data.length
+  //   );
+  //   if (text == this.processes[this.selectedProcessIndex].data)
+  //     this.elements.processSaveButton.setAttribute('disabled', true);
+  //   else this.elements.processSaveButton.removeAttribute('disabled');
 
-    const parsed = parser.parseProcess(text);
-    // console.log(parsed)
-    this.diagram.updateGraph(parsed);
-  }
+  //   const parsed = parser.parseProcess(text);
+  //   // console.log(parsed)
+  //   this.diagram.updateGraph(parsed);
+  // }
 
   //.....CODE EDITOR
 
@@ -200,27 +205,30 @@ class controllerDiagram {
     this.elements.codeEditor.style.display = show ? 'flex' : 'none';
     this.elements.codeEditorContainer.style.width = show ? '' : '0';
     this.elements.codeEditorDivider.style.width = show ? '' : '0';
-    if (show) this.codeEditor.markdownCodeMirror.refresh();
+    if (show) this.codeEditor.editor.refresh();
   }
 
   diagramCodeEditorChanged(data) {
-    const { value, change } = data;
+    const {
+      id,
+      file,
+      change,
+      value,
+      original
+    } = data;
 
     // console.log(value, change)
 
     let parsed = parser.parseProcess(value);
     this.diagram.updateGraph(parsed);
 
-    if (change.origin == 'setValue') {
-      this.elements.processSaveButton.setAttribute('disabled', true);
-    } else {
-      this.elements.processSaveButton.removeAttribute('disabled');
-      const sameLine = change.from.line == change.to.line;
-      if (change.origin == '+input') {
-      } else if (change.origin == '+delete') {
-      } else if (change.origin == 'paste') {
-      }
-    }
+    // if (change.origin == 'setValue') {
+    //   this.elements.processSaveButton.setAttribute('disabled', true);
+    // } else {
+    //   this.elements.processSaveButton.removeAttribute('disabled');
+    //   const sameLine = change.from.line == change.to.line;
+    //   if (change.origin == '+input') {} else if (change.origin == '+delete') {} else if (change.origin == 'paste') {}
+    // }
   }
 }
 

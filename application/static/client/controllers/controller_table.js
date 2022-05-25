@@ -3,6 +3,7 @@
 class controllerTable {
   constructor(id, modules) {
     this.modules = modules;
+    this.view = 'Table';
     this.elements = {
       entitiesList: document.getElementById('entities-list'),
       entityTable: document.getElementById('entity-table'),

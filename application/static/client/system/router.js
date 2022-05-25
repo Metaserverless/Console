@@ -1,15 +1,50 @@
 /* eslint-disable */
 
-const routes = [
-  { name: 'Main', path: '/main', component: 'main-view' },
-  { name: 'Javascript', path: '/javascript', component: 'javascript-view' },
-  { name: 'Markdown', path: '/markdown', component: 'markdown-view' },
-  { name: 'Sql', path: '/sql', component: 'sql-view' },
-  { name: 'Json', path: '/json', component: 'json-view' },
-  { name: 'Css', path: '/css', component: 'css-view' },
-  { name: 'Html', path: '/html', component: 'html-view' },
-  { name: 'Diagram', path: '/', component: 'diagram-view' },
-  { name: 'Table', path: '/table', component: 'table-view' },
+const routes = [{
+    name: 'Main',
+    path: '/main',
+    component: 'main-view'
+  },
+  {
+    name: 'Javascript',
+    path: '/javascript',
+    component: 'javascript-view'
+  },
+  {
+    name: 'Markdown',
+    path: '/markdown',
+    component: 'markdown-view'
+  },
+  {
+    name: 'Sql',
+    path: '/sql',
+    component: 'sql-view'
+  },
+  {
+    name: 'Json',
+    path: '/json',
+    component: 'json-view'
+  },
+  {
+    name: 'Css',
+    path: '/css',
+    component: 'css-view'
+  },
+  {
+    name: 'Html',
+    path: '/html',
+    component: 'html-view'
+  },
+  {
+    name: 'Diagram',
+    path: '/',
+    component: 'diagram-view'
+  },
+  {
+    name: 'Table',
+    path: '/table',
+    component: 'table-view'
+  },
 ];
 
 const router = {
@@ -68,6 +103,8 @@ const router = {
       }
     }
 
+
+
     // for (let link of this.elements.topMenu.querySelectorAll('a')) {
     //   link.classList.remove('active');
     //   // console.log(link.getAttribute('data-href'), this.activeView.name)
@@ -75,6 +112,10 @@ const router = {
     //     link.classList.add('active');
     //   }
     // }
+  },
+
+  activeViewName() {
+    return this.activeView.name;
   },
 
   replace() {

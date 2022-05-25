@@ -5,6 +5,7 @@ class controllerMarkdown {
   constructor(id, modules) {
     this.id = id;
     this.modules = modules;
+    this.view = 'Markdown';
     this.elements = {};
 
     const value = `# Foo
@@ -20,7 +21,7 @@ class controllerMarkdown {
 
     blah blah`;
 
-    this.codeEditor = new BaseCodeEditor(id, modules, {
+    this.codeEditor = new BaseCodeEditor(id, modules, this.view, {
       mode: 'markdown',
       value: '',
     });
