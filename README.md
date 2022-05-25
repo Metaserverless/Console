@@ -63,6 +63,20 @@ let's start with
 - Ask questions in https://t.me/nodeua and post issues on
   [github](https://github.com/HowProgrammingWorks/NodejsStarterKit/issues)
 
+## Quick installation
+
+- Run docker command for postgres
+
+```sh
+  docker run -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -d postgres
+```
+
+- Run to prepare database
+
+```sh
+  cd ./db && sh setup.sh && cd ..
+```
+
 ## License
 
 Copyright (c) 2020-2022 Metarhia contributors.
