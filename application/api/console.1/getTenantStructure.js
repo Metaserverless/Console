@@ -36,25 +36,25 @@
     dirPath = './application/schemas/';
     files = await node.fsp.readdir(dirPath);
     const schemas = files.filter(
-      (file) => file.indexOf('.') !== 0 && file.slice(-3) === '.js'
+      (file) => file.indexOf('.') !== 0 && file.slice(-3) === '.js',
     );
 
     dirPath = './application/flow/';
     files = await node.fsp.readdir(dirPath);
     const flows = files.filter(
-      (file) => file.indexOf('.') !== 0 && file.slice(-3) === '.md'
+      (file) => file.indexOf('.') !== 0 && file.slice(-3) === '.md',
     );
 
     dirPath = './application/domain/store/';
     files = await node.fsp.readdir(dirPath);
     const store = files.filter(
-      (file) => file.indexOf('.') !== 0 && file.slice(-3) === '.js'
+      (file) => file.indexOf('.') !== 0 && file.slice(-3) === '.js',
     );
 
     dirPath = './application/api/' + tenant + '.1/';
     files = await node.fsp.readdir(dirPath);
     const apis = files.filter(
-      (file) => file.indexOf('.') !== 0 && file.slice(-3) === '.js'
+      (file) => file.indexOf('.') !== 0 && file.slice(-3) === '.js',
     );
 
     dirPath = './application/static/tenants/' + tenant + '/';
@@ -65,7 +65,7 @@
       flows,
       schemas,
       store,
-      client
+      client,
     };
   },
 });
