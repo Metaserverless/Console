@@ -137,6 +137,7 @@ const treesManager = {
       return {
         name: folder.name,
         type: 'folder',
+        fileType: folder.filesType,
         ext: folder.filesExt,
 
         children: data[folder.name].map(name => {
