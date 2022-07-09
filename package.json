@@ -65,6 +65,7 @@
     "impress": "^2.6.10",
     "lowscript": "^0.0.5",
     "metasql": "^2.0.3",
+    "nodemailer": "^6.7.5",
     "pg": "^8.7.3",
     "redis": "^4.1.0"
   }

@@ -1,4 +1,5 @@
 /* eslint-disable */
+// import treesManager from '../elements/treesManager.js';
 
 class BaseCodeEditor {
   constructor(id, modules, view, config = {}) {
@@ -11,7 +12,9 @@ class BaseCodeEditor {
     this.view = view;
     this.mode = config.mode || 'javascript';
     const theme = this.modules.store.get('CodeMirrorTheme') || 'darcula';
-    this.file = null;
+    this.node = null;
+    // this.originalSource = '';
+    // this.editingSource = '';
 
     const modes = {
       javascript: {
@@ -108,7 +111,7 @@ class BaseCodeEditor {
     );
     this.modules.events.listen(
       'open:source:file',
-      this.openFile.bind(this)
+      this.openSourceFile.bind(this)
     );
   }
 
@@ -118,67 +121,47 @@ class BaseCodeEditor {
 
   valueChanged(cm, change) {
 
-    // console.log(this.file);
+    // console.log(this.node);
 
     const value = cm.getValue();
 
-    const originalPath = this.storePath(this.file, true);
-    const editingPath = this.storePath(this.file, false)
-    const originalSource = this.modules.store.get(originalPath);
-    this.modules.store.set(editingPath, value)
+    // const filePath = 'changedTreeItems.' + this.node.id;
 
-    this.modules.events.emit('code:editor:change', {
-      id: this.id,
-      file: this.file,
-      change,
-      value,
-      original: originalSource == value
-    });
+    // const file = this.modules.store.get(filePath);
+    // if (!file) return this.modules.dialogs.error('Unable to find file ' + this.node.id);
+
+    // const editinglPath = filePath + '.source.editing';
+    // this.modules.store.set(editinglPath, value);
+    this.node.original.source = value;
+    this.modules.events.emit('code:editor:change', this.node);
+    // this.modules.events.emit('code:editor:change', {
+    //   id: this.id,
+    //   node: this.node,
+    //   change,
+    //   value,
+    //   original: this.node.original.source.original == this.node.original.source.editing
+    // });
   }
 
   setTheme(theme) {
     this.editor.setOption('theme', theme);
   }
 
-  storePath(file, original = true) {
-    return `codeEditor.${original ? 'original' : 'editing'}.${file.type}.${file.path}`;
-  }
 
-  async openFile(file) {
-    const extension = file.name.split('.').pop();
-    if (this.view != this.modules.router.activeViewName()) return;
-    if (this.mode != this.extensionTypes[extension]) return;
-    if (this.file && this.file.name == file.name && this.file.path == file.path) {
-      return;
-    }
-    const originalPath = this.storePath(file, true);
-    const editingPath = this.storePath(file, false);
+  async openSourceFile(node) {
 
-    let source = this.modules.store.get(editingPath);
-    // console.log(file.type, file.path, source);
+    // const extension = node.text.split('.').pop();
+    // if (this.view != this.modules.router.activeViewName()) return;
+    if (this.node && this.node.id == node.id) return;
+    if (this.mode != this.extensionTypes[node.original.ext]) return;
 
-    if (!source) {
-      const data = await this.modules.transport.send('getTenantFile', {
-        type: file.type,
-        path: file.path
-      });
-      if (typeof data.source === 'string') {
-        source = data.source;
-        this.modules.store.set(originalPath, source)
-        this.modules.store.set(editingPath, source)
-      }
-    }
-    if (typeof source != 'string') return console.error('source not found', file.type, file.path, typeof source);
+    // console.log(file)
 
+    if (typeof node.original.source != 'string') return this.modules.dialogs.error('Can not find source for file "' + node.text + '"');
 
-
-    // this.modules.store.set()
-    this.file = {
-      ...file
-    };
-    this.editor.setValue(source);
+    this.node = node;
+    this.editor.setValue(node.original.source);
     this.editor.refresh();
-    this.modules.events.emit('source:file:opened', file);
 
   }
 

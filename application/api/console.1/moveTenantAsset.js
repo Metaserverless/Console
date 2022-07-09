@@ -4,12 +4,16 @@
   async method({
     type,
     path,
-    source
+    newPath
   }) {
 
-    console.log(type, path);
+    console.log(type, path, newPath);
+
+
+
     const tenant = 'tenant' + context.accountId;
-    const savePath = path.replace(/\.\./g, '');
+    const safePath = path.replace(/\.\./g, '');
+    const safeNewPath = newPath.replace(/\.\./g, '');
 
     const folders = {
       'schema': './application/schemas/',
@@ -19,13 +23,13 @@
       'client': './application/static/tenants/' + tenant + '/'
     };
 
-    const filePath = folders[type] + savePath;
-    const success = await node.fsp.writeFile(filePath, source, {
-      encoding: 'utf8'
-    });
+    const assetPath = folders[type] + safePath;
+    const newAssetPath = folders[type] + safeNewPath;
+    const success = await node.fsp.rename(assetPath, newAssetPath);
     return {
       type,
       path,
+      newPath,
       success: true,
     };
   },
