@@ -51,7 +51,7 @@ const treesManager = {
     database: {
       root: [],
       folder: [],
-      file: ['create', 'delete', 'rename'],
+      file: [],
       // custom:{}
     },
   },
@@ -427,6 +427,9 @@ const treesManager = {
 
   newTreeItem(folder) {
     // console.log('newSourceFile', this.currentTree, this.currentTreeNode);
+
+
+
     let alertText;
     if (!this.currentTree) alertText = 'You can not create files or folders only in this section';
     if (folder && !this.permissions[this.currentTree.section].folder.includes('create')) alertText = 'You can not create folder here';
@@ -530,12 +533,14 @@ const treesManager = {
 
   contextMenuAction(action, data) {
 
+    if (!this.currentTree || !['client', 'server'].includes(this.currentTree.section)) return this.modules.dialogs.alert('Action is temporary forbidden in this section');
 
     const inst = $.jstree.reference(data.reference) || this.currentTree.instance;
     if (!inst) return console.error('No tree found');
 
     const node = inst.get_node(data.reference);
     if (!['create', 'createFolder'].includes(action) && !node) return console.error('No node found');
+
 
     let result = false;
 

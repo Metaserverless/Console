@@ -89,7 +89,7 @@ class Tree {
     // console.log(data.action)
 
     if (data.action != 'select_node') return;
-    console.log(data.node.original);
+    // console.log(data.node.original);
 
     data.node.original.path = this.getNodePath(data.node);
     this.modules.events.emit('tree-item-selected', data.node);
