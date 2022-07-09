@@ -1,1 +1,1 @@
-aaaa
+const x = "aaaa";
