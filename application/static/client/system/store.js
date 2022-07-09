@@ -4,7 +4,8 @@ const _ = window._;
 const store = {
   data: {
     // visualViewport: document.getElementById('diagram'),
-    // codeEditorTheme:'darcula'
+    // codeEditorTheme:'darcula',
+    changedTreeNodes: {}
   },
 
   init() {},
@@ -29,6 +30,14 @@ const store = {
 
     return value;
   },
+
+  delete(path, local = false) {
+
+    if (local) {
+      localStorage.removeItem(path);
+    }
+    return _.unset(this.data, path);
+  }
 };
 
 export default store;

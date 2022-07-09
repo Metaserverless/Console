@@ -87,8 +87,8 @@ class controllerDiagram {
 
     this.modules.events.listen(
       'code:editor:change',
-      (data) => {
-        if (data.id == 'diagram-code-editor') this.diagramCodeEditorChanged(data)
+      (node) => {
+        if (node.type == 'process') this.diagramCodeEditorChanged(node)
       }
     );
 
@@ -208,16 +208,12 @@ class controllerDiagram {
     if (show) this.codeEditor.editor.refresh();
   }
 
-  diagramCodeEditorChanged(data) {
-    const {
-      id,
-      file,
-      change,
-      value,
-      original
-    } = data;
+  diagramCodeEditorChanged(node) {
 
-    // console.log(value, change)
+    if (!node.original || typeof node.original.source != 'string') return console.error('No original node');
+    const value = node.original.source;
+
+    // console.log(value)
 
     let parsed = parser.parseProcess(value);
     this.diagram.updateGraph(parsed);

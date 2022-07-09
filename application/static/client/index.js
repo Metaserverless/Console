@@ -5,9 +5,10 @@ import transport from './system/transport.js';
 import store from './system/store.js';
 import router from './system/router.js';
 import keyboard from './system/keyboard.js';
-import sources from './system/sources.js';
+import treesManager from './elements/treesManager.js';
+
 import dialogs from './system/dialogs.js';
-import Tooltip from './system/tooltip.js';
+import Tooltip from './elements/tooltip.js';
 
 import controllerTopHeader from './controllers/controller_topheader.js';
 import controllerActivityBar from './controllers/controller_activitybar.js';
@@ -57,8 +58,10 @@ const dm = {
 
   async init() {
     // this.initControls();
+    events.init();
     keyboard.init();
-    sources.init(this.modules);
+    treesManager.init(this.modules);
+
     dialogs.init();
     this.tooltip = new Tooltip();
 
@@ -83,22 +86,6 @@ const dm = {
     this.controllerTerminal = new controllerTerminal('terminal', modules);
 
     router.init();
-
-    //   const parser = new NodeSQLParser.Parser();
-
-    //   const sql1 = `CREATE TABLE "Account" (
-    //     "accountId" bigint generated always as identity,
-    //     "login" varchar(64) NOT NULL,
-    //     "password" varchar NOT NULL
-    //   );`
-    //  const sql2 = "select id, name from students where age < 18";
-
-    //   const ast = parser.astify(sql1.replaceAll('\n', ''))
-
-    //   console.log(ast)
-    //   const sql = parser.sqlify(ast)
-    //   console.log(sql)
-
 
   },
 

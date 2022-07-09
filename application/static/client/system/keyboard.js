@@ -2,19 +2,36 @@ import events from './events.js';
 
 const keyboard = {
 
-  codes: [{
-    ctrlKey: true,
-    shiftKey: true,
-    key: 'S',
-    event: 'Ctrl+Shift+S'
-  }, {
-    ctrlKey: true,
-    key: 's',
-    event: 'Ctrl+s'
-  }],
+  codes: [
+    // {
+    //   ctrlKey: true,
+    //   shiftKey: true,
+    //   keyCode: 78,
+    //   // key: 'N',
+    //   event: 'Ctrl+Shift+N'
+    // },
+    // {
+    //   ctrlKey: true,
+    //   keyCode: 78,
+    //   // key: 'n',
+    //   event: 'Ctrl+n'
+    // },
+    {
+      ctrlKey: true,
+      shiftKey: true,
+      keyCode: 83,
+      // key: 'S',
+      event: 'Ctrl+Shift+S'
+    }, {
+      ctrlKey: true,
+      keyCode: 83,
+      // key: 's',
+      event: 'Ctrl+s'
+    }
+  ],
 
   init() {
-    document.addEventListener('keydown', this.keyDown.bind(this));
+    window.addEventListener('keydown', this.keyDown.bind(this));
   },
 
   keyDown(e) {

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Components Test</title>
+    <link rel="icon" href="/favicon.png" sizes="any" type="image/png">
+    <meta charset="utf-8">
+
+    <style>
+        .testSquare {
+            width: 100px;
+            height: 100px;
+            background-color: yellow;
+        }
+
+    </style>
+
+</head>
+
+<body>
+    <div id="app">
+        <div id="router-view"></div>
+        <div class="square testSquare"></div>
+    </div>
+    <button id="remove">Unload</button>
+    <button id="load">Load</button>
+    <button id="test">Test</button>
+    <script>
+        class MUI {
+
+            constructor() {
+                this.app = document.getElementById('app');
+                this.routerView = document.getElementById('router-view');
+                this.views = {};
+                this.ctrls = {};
+                this.fetchView('view1.html');
+                document.getElementById('remove').addEventListener('click', () => {
+                    // console.log(this)
+                    this.unloadView('view1.html');
+                });
+                document.getElementById('load').addEventListener('click', () => {
+                    this.loadView('view1.html');
+                });
+                document.getElementById('test').addEventListener('click', () => {
+                    // console.log(this.ctrls['view1'])
+                    this.ctrls['view1'].test();
+                });
+
+            }
+            fetchView(url) {
+                fetch(url).then(res => res.text()).then(html => {
+                    var range = document.createRange();
+                    range.selectNode(this.app);
+                    const documentFragment = range.createContextualFragment(html);
+                    // console.log(documentFragment.children)
+                    // this.views[url] = documentFragment;
+                    // console.log(this.views[url])
+                    this.routerView.appendChild(documentFragment);
+                    // this.views[url] = this.app
+                });
+            }
+            unloadView(url) {
+                //this.app.replaceChildren([]);
+                this.views[url] = Array.from(this.routerView.children)
+                this.routerView.replaceChildren();
+                // console.log(this.views[url]);
+                // this.app.removeChild(this.views[url]);
+            }
+            loadView(url) {
+                // console.log(this.views[url]);
+                const documentFragment = document.createDocumentFragment();
+                documentFragment.append(...this.views[url]);
+                this.routerView.appendChild(documentFragment);
+            }
+            register(ctrl) {
+                console.log(this.ctrls[ctrl.name], ctrl)
+                this.ctrls[ctrl.name] = ctrl;
+            }
+
+
+
+        }
+
+        const mui = new MUI();
+
+    </script>
+</body>
+
+</html>

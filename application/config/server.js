@@ -1,7 +1,10 @@
 ({
   host: '0.0.0.0',
-  balancer: 8000,
   protocol: 'http',
+  // host: 'metactos.com',
+  // protocol: 'https',
+  balancer: 8000,
+
   ports: [8001, 8002],
   nagle: false,
   timeouts: {

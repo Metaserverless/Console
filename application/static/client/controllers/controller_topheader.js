@@ -9,6 +9,7 @@ class controllerTopHeader {
     this.modules = modules;
     this.elements = {
       topMenu: document.getElementById('top-menu'),
+      topLogoImage: document.getElementById('top-logo-image'),
       cssThemeLink: document.getElementById('css-theme-link'),
       cssThemeSwitcher: document.getElementById('css-theme-switcher'),
     };
@@ -18,7 +19,12 @@ class controllerTopHeader {
         items: [{
             title: 'New file',
             action: 'new-file',
-            shortcut: 'Ctrl+N',
+            shortcut: '',
+          },
+          {
+            title: 'New folder',
+            action: 'new-folder',
+            shortcut: '',
           },
           {
             title: 'Open file',
@@ -34,7 +40,7 @@ class controllerTopHeader {
             shortcut: 'Ctrl+S',
           },
           {
-            title: 'Save file as',
+            title: 'Save all',
             action: 'Ctrl+Shift+S',
             shortcut: 'Ctrl+Shift+S',
           },
@@ -172,6 +178,13 @@ class controllerTopHeader {
     ];
 
     this.topMenu = new Topmenu('top-menu', modules, this.items);
+    this.elements.topLogoImage.addEventListener(
+      'click',
+      () => {
+        // console.log('top-logo-click');
+        this.modules.events.emit('ide-top-logo-click', {});
+      },
+    )
 
     let CodeMirrorTheme =
       this.modules.store.get('CodeMirrorTheme') || 'darcula';
