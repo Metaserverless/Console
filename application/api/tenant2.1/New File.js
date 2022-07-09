@@ -1,1 +1,9 @@
-const x = "aaaa";
+const x = 'aaaa';
+
+({
+  access: 'public',
+
+  async method() {
+    return { x };
+  },
+});
