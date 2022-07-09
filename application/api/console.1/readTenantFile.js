@@ -5,7 +5,6 @@
     type,
     path
   }) {
-
     console.log(type, path);
     const tenant = 'tenant' + context.accountId;
     const safePath = path.replace(/\.\./g, '');

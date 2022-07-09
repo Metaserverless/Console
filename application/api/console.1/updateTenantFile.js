@@ -6,7 +6,6 @@
     path,
     source
   }) {
-
     console.log(type, path);
     const tenant = 'tenant' + context.accountId;
     const safePath = path.replace(/\.\./g, '');
@@ -21,12 +20,12 @@
 
     const filePath = folders[type] + safePath;
     const success = await node.fsp.writeFile(filePath, source, {
-      encoding: 'utf8'
+      encoding: 'utf8',
     });
     return {
       type,
       path,
-      success: true,
+      success: !!success,
     };
   },
 });
