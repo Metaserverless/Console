@@ -1,5 +1,3 @@
-const x = 'aaaa';
-
 ({
   access: 'public',
 
