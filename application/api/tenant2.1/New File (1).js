@@ -1,5 +1,3 @@
-const d = true;
-
 ({
   access: 'public',
 
