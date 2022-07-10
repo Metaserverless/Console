@@ -24,7 +24,7 @@ class Tree {
       .on('changed.jstree', this.selectTreeItem.bind(this))
       .on("create_node.jstree", (e, data) => {
         // console.log(data);
-        data.node.original.path = this.getNodePath(data.node);
+        // data.node.original.path = this.getNodePath(data.node);
         this.modules.events.emit('new-node-created', data.node);
       })
       .on("copy_node.jstree", (e, data) => {
@@ -34,7 +34,7 @@ class Tree {
           data.node.original = $.extend(true, {}, data.original.original);
 
           data.node.original.new = true;
-          data.node.original.path = this.getNodePath(data.node);
+          // data.node.original.path = this.getNodePath(data.node);
           this.modules.events.emit('new-node-from-copy', data.node);
 
         }
@@ -42,14 +42,16 @@ class Tree {
       })
       .on("move_node.jstree", (e, data) => {
         // console.log(data);
+
+        // data.node.original.path = this.getNodePath(data.node);
         this.modules.events.emit('node-moved', data.node);
-        data.node.original.path = this.getNodePath(data.node);
 
       })
       .on("rename_node.jstree", (e, data) => {
         // console.log(data);
-        data.node.original.path = this.getNodePath(data.node);
-        data.node.original.text = data.node.text;
+        // data.node.original.path = this.getNodePath(data.node);
+        // data.node.original.text = data.node.text;
+        this.modules.events.emit('node-renamed', data.node);
       });
     // .on("cut.jstree", (e, data) => {
     //   console.log(data);
@@ -68,22 +70,6 @@ class Tree {
   }
 
 
-
-  // makeFlatData(ids) {
-  //   let res = [],
-  //     instance = $(this.el).jstree(true),
-  //     item;
-  //   for (let id of ids) {
-  //     item = instance.get_node(id)
-  //     res.push(item);
-  //     if (item.children) res.push(...this.makeFlatData(item.children))
-  //   }
-  //   return res;
-  // }
-
-
-
-
   selectTreeItem(e, data) {
 
     // console.log(data.action)
@@ -98,13 +84,18 @@ class Tree {
 
 
   getNodePath(node) {
-    const path = $(this.el).jstree(true).get_path(node);
+    const path = this.instance.get_path(node);
     return path.join('/');
   }
 
+  getNodeParentPath(node) {
+    const path = this.instance.get_path(node.parent);
+    return path ? path.join('/') : '';
+  }
+
   updateData(data) {
-    this.el.jstree(true).settings.core.data = this.data = data;
-    this.el.jstree(true).refresh();
+    this.instance.settings.core.data = this.data = data;
+    this.instance.refresh();
     // $('#treeView').jstree(true).refresh_node("node_id_here")
   }
 

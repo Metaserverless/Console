@@ -1,7 +1,9 @@
 ({
   access: 'public',
 
-  async method({ items }) {
+  async method({
+    items
+  }) {
     // console.log(files);
     if (!items || !Array.isArray(items)) throw new Error('No files provided');
 
@@ -43,9 +45,9 @@
     for (const item of items) {
       const rootPath = folders[item.type] || folders[item.section];
       const safePath =
-        item.section === 'client'
-          ? sanitizePath(item.path)
-          : sanitizePath(item.name);
+        item.section === 'client' ?
+        sanitizePath(item.path) :
+        sanitizePath(item.name);
       if (!rootPath || !safePath) continue;
       const itemPath = rootPath + safePath;
 
@@ -74,9 +76,9 @@
       } else if (item.newPath) {
         if (item.newPath !== item.path) {
           const safeNewPath = sanitizePath(
-            item.section === 'client'
-              ? item.newPath
-              : item.newName || item.name,
+            item.section === 'client' ?
+            item.newPath :
+            item.newName || item.name,
           );
           if (!safeNewPath) continue;
           const newItemPath = rootPath + safeNewPath;

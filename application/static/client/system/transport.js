@@ -6,9 +6,13 @@ import tempData from './temp_data.js';
 
 const transport = {
   endpoint: null,
+  accountId: 0,
 
-  init(api) {
-    this.endpoint = window.api;
+  init(api, accountId) {
+
+    this.endpoint = api;
+    this.accountId = accountId;
+
     if (!api || !api.console)
       return console.error('Console APIs are not available');
 

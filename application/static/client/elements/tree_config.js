@@ -1,7 +1,65 @@
 /* eslint-disable */
-const tree_config = function (manager, section, data) {
 
-  // console.log(section)
+const icons = {
+  // server: {
+  //   icon: '/client/img/folder_type_server.svg',
+  // },
+  // client: {
+  //   icon: '/client/img/folder_type_client.svg',
+  // },
+  folder: {
+    icon: false,
+  },
+  process: {
+    icon: '/client/img/file_type_puppet.svg',
+  },
+  procedure: {
+    icon: '/client/img/file_type_js.svg', //"fab fa-markdown"
+  },
+  rpc: {
+    icon: '/client/img/file_type_js.svg', //"fab fa-markdown"
+  },
+  schema: {
+    icon: '/client/img/file_type_js.svg', //"fab fa-markdown"
+  },
+  md: {
+    icon: '/client/img/markdown.svg', //"fab fa-markdown" //file_type_markdown.svg
+  },
+  sql: {
+    icon: '/client/img/file_type_sql.svg',
+  },
+  postgres: {
+    icon: '/client/img/file_type_pgsql.svg',
+  },
+  redis: {
+    icon: '/client/img/file_type_redis.webp'
+  },
+  js: {
+    icon: '/client/img/file_type_js.svg',
+  },
+  json: {
+    icon: '/client/img/file_type_json.svg',
+  },
+  html: {
+    icon: '/client/img/file_type_html.svg',
+  },
+  css: {
+    icon: '/client/img/file_type_css.svg',
+  },
+  text: {
+    icon: '/client/img/file_type_text.svg',
+  },
+  yaml: {
+    icon: '/client/img/file_type_yaml.svg',
+  },
+  image: {
+    icon: '/client/img/file_type_image.svg',
+  },
+}
+
+const make = function (manager, section, data) {
+
+  console.log(section)
 
   return {
     core: {
@@ -13,59 +71,7 @@ const tree_config = function (manager, section, data) {
       check_callback: manager.checkCallback.bind(manager),
       data: data,
     },
-    types: {
-      // server: {
-      //   icon: '/client/img/folder_type_server.svg',
-      // },
-      // client: {
-      //   icon: '/client/img/folder_type_client.svg',
-      // },
-      folder: {
-        icon: false,
-      },
-      process: {
-        icon: '/client/img/file_type_puppet.svg',
-      },
-      procedure: {
-        icon: '/client/img/file_type_js.svg', //"fab fa-markdown"
-      },
-      rpc: {
-        icon: '/client/img/file_type_js.svg', //"fab fa-markdown"
-      },
-      schema: {
-        icon: '/client/img/file_type_js.svg', //"fab fa-markdown"
-      },
-      md: {
-        icon: '/client/img/file_type_markdown.svg', //"fab fa-markdown"
-      },
-      sql: {
-        icon: '/client/img/file_type_sql.svg',
-      },
-      postgres: {
-        icon: '/client/img/file_type_pgsql.svg',
-      },
-      redis: {
-        icon: '/client/img/file_type_redis.webp'
-      },
-      js: {
-        icon: '/client/img/file_type_js.svg',
-      },
-      json: {
-        icon: '/client/img/file_type_json.svg',
-      },
-      html: {
-        icon: '/client/img/file_type_html.svg',
-      },
-      css: {
-        icon: '/client/img/file_type_css.svg',
-      },
-      text: {
-        icon: '/client/img/file_type_text.svg',
-      },
-      image: {
-        icon: '/client/img/file_type_image.svg',
-      },
-    },
+    types: icons,
     plugins: [
       'changed',
       'types',
@@ -145,6 +151,27 @@ const tree_config = function (manager, section, data) {
           //   });
           // },
           "action": (data) => manager.contextMenuAction('createFolder', data)
+        };
+
+        const uploadImage = {
+          "separator_before": false,
+          "separator_after": true,
+          "_disabled": section.type !== 'client', //(this.check("create_node", data.reference, {}, "last")),
+          "label": "Upload Image",
+          // "action": function (data) {
+          //   var inst = $.jstree.reference(data.reference),
+          //     obj = inst.get_node(data.reference);
+          //   inst.create_node(obj, {}, "last", function (new_node) {
+          //     try {
+          //       inst.edit(new_node);
+          //     } catch (ex) {
+          //       setTimeout(function () {
+          //         inst.edit(new_node);
+          //       }, 0);
+          //     }
+          //   });
+          // },
+          "action": (data) => manager.contextMenuAction('uploadImage', data)
         };
 
         const rename = {
@@ -247,19 +274,32 @@ const tree_config = function (manager, section, data) {
         //   }
         // }
 
-        return {
+        const result = section.type == 'client' ? {
           create,
           createFolder,
+          uploadImage,
           rename,
           remove,
           cut,
           copy,
           paste
           // edit
-        };
+        } : {
+          create,
+          rename,
+          remove,
+          cut,
+          copy,
+          paste
+        }
+
+        return result;
       }
     }
   }
 };
 
-export default tree_config;
+export default {
+  make,
+  icons
+};

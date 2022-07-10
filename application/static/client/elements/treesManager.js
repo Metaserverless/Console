@@ -25,7 +25,7 @@ const treesManager = {
       ext: ['js']
     },
     client: {
-      ext: ['js', 'css', 'html', 'json', 'md']
+      ext: ['js', 'css', 'html', 'json', 'md', 'txt']
     }
   },
   fileTypes: {
@@ -34,7 +34,8 @@ const treesManager = {
     'jpeg': 'image',
     'svg': 'image',
     'ico': 'image',
-    'gif': 'image'
+    'gif': 'image',
+    'txt': 'text'
   },
   permissions: {
     server: {
@@ -72,6 +73,8 @@ const treesManager = {
     modules.events.listen('new-node-created', this.saveAndCheckTreeItem.bind(this));
     modules.events.listen('new-node-from-copy', this.saveAndCheckTreeItem.bind(this));
     modules.events.listen('node-moved', this.saveAndCheckTreeItem.bind(this));
+    modules.events.listen('node-renamed', this.saveAndCheckTreeItem.bind(this));
+
 
     modules.events.listen('Ctrl+s', this.saveFile.bind(this));
     modules.events.listen('Ctrl+Shift+S', this.saveAllChanges.bind(this));
@@ -100,7 +103,8 @@ const treesManager = {
       // console.log(section.type)
       if (!treesData[section.type]) continue;
 
-      const treeconfig = tree_config(this, section, treesData[section.type]);
+      // console.log()
+      const treeconfig = tree_config.make(this, section, treesData[section.type]);
 
       this.trees[section.type] = new Tree(section.el, section.type, treeconfig, this.modules);
       if (selectedSectionType == section.type) {
@@ -115,6 +119,11 @@ const treesManager = {
   processServerData(data) {
 
     const trees = {};
+
+    // console.log(data.client)
+
+    const db = data.client.find(folder => folder.name == 'db');
+    const client = data.client.filter(folder => folder.name != 'db');
 
 
     const server = [{
@@ -157,29 +166,43 @@ const treesManager = {
       name: 'Postgres',
       type: 'folder',
       fileType: 'postgres',
-      ext: 'md',
-      children: [{
-        name: 'Order.md',
-        // folder: 'Postgres',
-        type: 'postgres',
-        ext: 'md'
-      }]
+      ext: 'js',
+      children: db.children.find(folder => folder.name == 'Postgres').children.map(child => {
+        return {
+          name: child.name,
+          type: 'postgres',
+          ext: 'js'
+        }
+      })
+      // children: [{
+      //   name: 'Order.js',
+      //   // folder: 'Postgres',
+      //   type: 'postgres',
+      //   ext: 'js'
+      // }]
     }, {
       name: 'Redis',
       type: 'folder',
       fileType: 'redis',
       ext: 'js',
-      children: [{
-        name: 'Order.js',
-        // folder: 'Redis',
-        type: 'redis',
-        ext: 'js'
-      }]
+      children: db.children.find(folder => folder.name == 'Redis').children.map(child => {
+        return {
+          name: child.name,
+          type: 'redis',
+          ext: 'js'
+        }
+      })
+      // children: [{
+      //   name: 'Order.js',
+      //   // folder: 'Redis',
+      //   type: 'redis',
+      //   ext: 'js'
+      // }]
     }];
 
 
     trees.server = this.traverseFolders(server, 'server', false);
-    trees.client = this.traverseFolders(data.client, 'client', false);
+    trees.client = this.traverseFolders(client, 'client', false);
     trees.database = this.traverseFolders(database, 'database', false);
 
     return trees;
@@ -322,6 +345,9 @@ const treesManager = {
       css: 'Css',
       html: 'Html',
       json: 'Json',
+      text: 'Text',
+      yaml: 'Yaml',
+      image: 'Image',
       postgres: 'Table',
       redis: 'Main',
     };
@@ -332,9 +358,17 @@ const treesManager = {
       this.setStoredFile(node);
       view = views[node.type] || 'Main';
       if (node.type != 'folder' && ['server', 'client'].includes(node.original.section)) {
-        this.openSourceFile(node);
+        if (node.type === 'image' && this.modules.transport.accountId) {
+          this.modules.events.emit('image-selected', {
+            url: `/tenants/tenant${this.modules.transport.accountId}/` + node.original.path
+          });
+        } else {
+          this.openSourceFile(node);
+        }
+
       }
     }
+    // console.log(view)
     this.modules.router.goto(view);
   },
 
@@ -352,11 +386,11 @@ const treesManager = {
 
       const args = {
         section: node.original.section,
-        type: node.original.section == 'server' ? node.type : node.original.section,
-        path: node.original.section == 'server' ? node.text : path
+        type: node.original.section == 'client' ? node.original.section : node.type,
+        path: node.original.section == 'client' ? path : node.text
       };
 
-      console.log(args)
+      // console.log(args)
 
       const data = await this.modules.transport.send('readTenantFile', args);
 
@@ -378,6 +412,21 @@ const treesManager = {
   },
 
   saveAndCheckTreeItem(node) {
+    const section = node.original.section;
+
+    if (node.type != 'folder') {
+      const ext = node.text.split('.').pop();
+      const parent = this.trees[section].instance.get_node(node.parent);
+      if (ext != node.original.ext) {
+        node.original.ext = ext;
+        node.type = node.original.type = parent && parent.original.fileType ? parent.original.fileType : this.fileTypes[ext] ? this.fileTypes[ext] : ext;
+        node.icon = tree_config.icons[node.type] ? tree_config.icons[node.type].icon : '/client/img/default_file.svg';
+      }
+    }
+
+    node.original.path = this.trees[section].getNodePath(node);
+    node.original.text = node.text;
+
     this.setStoredFile(node);
     setTimeout(() => this.setTreeNodeElementChanged(node), 0);
   },
@@ -394,14 +443,18 @@ const treesManager = {
 
     if (node.original.new) different = true;
     else if (storedFile.text != node.text) different = true;
+    else if (storedFile.type != node.original.type) different = true;
     else if (storedFile.path != node.original.path) different = true;
     else if (node.type != 'folder' && storedFile.source != node.original.source) different = true;
 
     node.li_attr.changed = different ? true : false;
 
     // console.log(node.original.section, different, storedFile.text, node.original.text)
-
-    if (this.trees[node.original.section]) this.trees[node.original.section].instance.redraw_node(node);
+    // console.log(node.text, different)
+    if (this.trees[node.original.section]) {
+      // this.trees[node.original.section].instance.refresh_node(node.original)
+      this.trees[node.original.section].instance.redraw_node(node);
+    }
   },
 
 
@@ -467,7 +520,7 @@ const treesManager = {
             let child = treeInstance.get_node(childId);
             if (child.type != 'folder') {
               ext = child.text.split('.').pop();
-              fileType = child.original.fileType || ext;
+              fileType = child.original.fileType || this.fileTypes[ext] || ext;
               ext = child.original.ext || ext;
               break;
             }
@@ -539,7 +592,8 @@ const treesManager = {
     if (!inst) return console.error('No tree found');
 
     const node = inst.get_node(data.reference);
-    if (!['create', 'createFolder'].includes(action) && !node) return console.error('No node found');
+    if (!['create', 'createFolder', 'uploadImage'].includes(action) && !node) return console.error('No node found');
+
 
 
     let result = false;
@@ -553,11 +607,16 @@ const treesManager = {
       case 'createFolder':
         result = this.newTreeItem(true);
         break;
+      case 'uploadImage':
+        // console.log(node)
+        this.uploadImageDialog();
+        break;
       case 'rename':
         inst.edit(node);
 
         if (node.type != 'folder') {
           const ext = node.text.split('.').pop();
+          node.original.type = this.fileTypes[ext] || ext;
           node.original.ext = ext;
         }
 
@@ -783,9 +842,81 @@ const treesManager = {
 
 
     return false;
-  }
+  },
 
+  uploadImageDialog() {
+    if (!this.currentTree || this.currentTree.section != 'client') return;
+    const el = document.getElementById('image_upload_component');
+    this.modules.dialogs.open(el, {
+      title: 'Upload images',
+      buttons: [{
+          text: 'Cancel',
+          callback: () => {
+            this.modules.dialogs.close()
+          }
+        },
+        {
+          text: 'Upload',
+          callback: async () => await this.uploadImages()
+        },
+      ]
+    });
+  },
 
+  async uploadImages() {
+    const el = document.getElementById('image_upload_input');
+    // console.log(el.files);
+    if (!el.files.length) return this.modules.dialogs.close();
+
+    const treeInstance = this.currentTree.instance;
+    const section = this.currentTree.section;
+    const permissions = this.permissions[section].file;
+
+    let parent, path;
+
+    if (this.currentTreeNode) {
+      parent = this.currentTreeNode.type == 'folder' ? this.currentTreeNode : treeInstance.get_node(this.currentTreeNode.parent);
+      path = this.currentTreeNode.type == 'folder' ? this.currentTreeNode.original.path : this.currentTree.getNodeParentPath(this.currentTreeNode);
+    } else {
+      parent = this.currentTree.instance.get_node('#');
+      path = '';
+    }
+
+    const uploaded = [];
+
+    for (let i = 0; i < el.files.length; i++) {
+      const url = await this.blobToBase64(el.files[i]);
+      const data = url.substring(url.indexOf(',') + 1);
+      // console.log(path, el.files[i].name, data.length)
+
+      const res = await this.modules.transport.send('uploadFile', {
+        path,
+        name: el.files[i].name,
+        data
+      })
+      uploaded.push(res);
+    }
+    console.log(uploaded);
+    for (let file of uploaded) {
+      if (!file.success) continue;
+      const node = this.makeFile(file.name, file.name.split('.').pop(), section, permissions, 'image', false);
+      const newId = treeInstance.create_node(parent, node, 'last');
+      this.setStoredFile(treeInstance.get_node(newId));
+    }
+
+    el.value = null;
+    this.modules.dialogs.close();
+  },
+
+  blobToBase64(blob) {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    return new Promise((resolve) => {
+      reader.onloadend = () => {
+        resolve(reader.result);
+      };
+    });
+  },
 
 };
 

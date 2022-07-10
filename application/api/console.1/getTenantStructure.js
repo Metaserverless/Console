@@ -28,7 +28,7 @@
       return tree;
     };
 
-    console.log(context.accountId);
+    // console.log(context.accountId);
     const tenant = 'tenant' + context.accountId;
 
     let dirPath, files;

@@ -1,20 +1,20 @@
 /* eslint-disable */
 import BaseCodeEditor from '../editors/baseCodeEditor.js';
 
-class controllerSql {
+class controllerYaml {
   constructor(id, modules) {
     this.id = id;
     this.modules = modules;
-    this.view = 'Sql';
+    this.view = 'Yaml';
     this.elements = {};
 
-    const value = `SELECT * FROM 'Order';`;
+    const value = ``;
 
     this.codeEditor = new BaseCodeEditor(id, modules, this.view, {
-      mode: 'text/x-sql',
-      value: ''
+      mode: 'text/x-yaml',
+      value: '',
     });
   }
 }
 
-export default controllerSql;
+export default controllerYaml;

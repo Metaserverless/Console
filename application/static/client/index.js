@@ -20,6 +20,9 @@ import controllerSql from './controllers/controller_sql.js';
 import controllerJson from './controllers/controller_json.js';
 import controllerCss from './controllers/controller_css.js';
 import controllerHtml from './controllers/controller_html.js';
+import controllerText from './controllers/controller_text.js';
+import controllerYaml from './controllers/controller_yaml.js';
+import controllerImage from './controllers/controller_image.js';
 import controllerDiagram from './controllers/controller_diagram.js';
 import controllerTable from './controllers/controller_table.js';
 import controllerTerminal from './controllers/controller_terminal.js';
@@ -81,6 +84,9 @@ const dm = {
     this.controllerJson = new controllerJson('json-view', modules);
     this.controllerCss = new controllerCss('css-view', modules);
     this.controllerHtml = new controllerHtml('html-view', modules);
+    this.controllerText = new controllerText('text-view', modules);
+    this.controllerYaml = new controllerYaml('yaml-view', modules);
+    this.controllerImage = new controllerImage('image-view', modules);
     this.controllerDiagram = new controllerDiagram('diagram-view', modules);
     this.controllerTable = new controllerTable('table-view', modules);
     this.controllerTerminal = new controllerTerminal('terminal', modules);
@@ -91,8 +97,8 @@ const dm = {
 
 
 
-  initTransport(api) {
-    transport.init(api);
+  initTransport(api, accountId) {
+    transport.init(api, accountId);
   },
 };
 

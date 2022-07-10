@@ -36,6 +36,21 @@ const routes = [{
     component: 'html-view'
   },
   {
+    name: 'Text',
+    path: '/text',
+    component: 'text-view'
+  },
+  {
+    name: 'Yaml',
+    path: '/yaml',
+    component: 'yaml-view'
+  },
+  {
+    name: 'Image',
+    path: '/image',
+    component: 'image-view'
+  },
+  {
     name: 'Diagram',
     path: '/',
     component: 'diagram-view'

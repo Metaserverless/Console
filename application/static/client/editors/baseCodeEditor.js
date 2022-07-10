@@ -17,7 +17,7 @@ class BaseCodeEditor {
     // this.editingSource = '';
 
     const modes = {
-      javascript: {
+      'javascript': {
         extraKeys: {
           'Ctrl-Space': 'autocomplete',
           'Ctrl-Q': function (cm) {
@@ -36,7 +36,7 @@ class BaseCodeEditor {
           }
         },
       },
-      markdown: {
+      'markdown': {
         highlightFormatting: true,
         extraKeys: {
           'Ctrl-Space': 'autocomplete',
@@ -52,41 +52,67 @@ class BaseCodeEditor {
         ],
         lint: true,
       },
-      sql: {
+      'text/x-sql': {
+
+        indentWithTabs: true,
+        smartIndent: true,
+        matchBrackets: true,
+        autofocus: true,
+        foldGutter: true,
+
         extraKeys: {
           'Ctrl-Space': 'autocomplete',
-          'Ctrl-Q': function (cm) {
-            cm.foldCode(cm.getCursor());
-          },
         },
-        foldGutter: true,
-        gutters: [
-          'CodeMirror-lint-markers',
-          'CodeMirror-linenumbers',
-          'CodeMirror-foldgutter',
-        ],
-        lint: true,
+        hintOptions: {
+          tables: {
+            users: ["name", "score", "birthDate"],
+            countries: ["name", "population", "size"]
+          }
+        }
       },
       'application/ld+json': {
         matchBrackets: true,
         autoCloseBrackets: true,
+
       },
       'text/css': {
         extraKeys: {
           'Ctrl-Space': 'autocomplete'
         },
       },
-      'text/html': {},
+      'text/html': {
+        mode: {
+          name: "htmlmixed",
+          tags: {
+            style: [
+              ["type", /^text\/(x-)?scss$/, "text/x-scss"],
+              [null, null, "css"]
+            ],
+            custom: [
+              [null, null, "customMode"]
+            ]
+          }
+        },
+        selectionPointer: true,
+        htmlMode: true,
+
+      },
+      'text/x-textile': {},
+      'text/x-yaml': {
+
+      },
     };
 
     this.extensionTypes = {
       'js': 'javascript',
       'json': 'application/ld+json',
       'md': 'markdown',
-      'sql': 'sql',
+      'sql': 'text/x-sql',
       // 'pgsql': 'sql',
       'html': 'text/html',
       'css': 'text/css',
+      'yaml': 'text/x-yaml',
+      'txt': 'text/x-textile',
     };
 
     if (!modes[this.mode]) return console.error('mode not found', this.mode);
