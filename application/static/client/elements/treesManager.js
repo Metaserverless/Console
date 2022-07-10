@@ -841,6 +841,7 @@ const treesManager = {
 
     return false;
   },
+<<<<<<< HEAD
 
   uploadImageDialog() {
     if (!this.currentTree || this.currentTree.section != 'client') return;
@@ -902,6 +903,69 @@ const treesManager = {
       this.setStoredFile(treeInstance.get_node(newId));
     }
 
+=======
+
+  uploadImageDialog() {
+    if (!this.currentTree || this.currentTree.section != 'client') return;
+    const el = document.getElementById('image_upload_component');
+    this.modules.dialogs.open(el, {
+      title: 'Upload images',
+      buttons: [{
+          text: 'Cancel',
+          callback: () => {
+            this.modules.dialogs.close()
+          }
+        },
+        {
+          text: 'Upload',
+          callback: async () => await this.uploadImages()
+        },
+      ]
+    });
+  },
+
+  async uploadImages() {
+    const el = document.getElementById('image_upload_input');
+    // console.log(el.files);
+    if (!el.files.length) return this.modules.dialogs.close();
+
+    const treeInstance = this.currentTree.instance;
+    const section = this.currentTree.section;
+    const permissions = this.permissions[section].file;
+
+    let parent, path;
+
+    if (this.currentTreeNode) {
+      parent = this.currentTreeNode.type == 'folder' ? this.currentTreeNode : treeInstance.get_node(this.currentTreeNode.parent);
+      path = this.currentTreeNode.type == 'folder' ? this.currentTreeNode.original.path : this.currentTree.getNodeParentPath(this.currentTreeNode);
+    } else {
+      parent = this.currentTree.instance.get_node('#');
+      path = '';
+    }
+
+    const uploaded = [];
+
+    for (let i = 0; i < el.files.length; i++) {
+      const url = await this.blobToBase64(el.files[i]);
+      const data = url.substring(url.indexOf(',') + 1);
+      // console.log(path, el.files[i].name, data.length)
+
+      const res = await this.modules.transport.send('uploadFile', {
+        path,
+        name: el.files[i].name,
+        data
+      })
+      uploaded.push(res);
+    }
+    console.log(uploaded);
+    for (let file of uploaded) {
+      if (!file.success) continue;
+      const node = this.makeFile(file.name, file.name.split('.').pop(), section, permissions, 'image', false);
+      const newId = treeInstance.create_node(parent, node, 'last');
+      this.setStoredFile(treeInstance.get_node(newId));
+    }
+
+>>>>>>> edda8005b330cc39aba7b492efbd721889378097
     el.value = null;
     this.modules.dialogs.close();
   },
