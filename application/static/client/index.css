@@ -438,7 +438,7 @@ textarea {
   /* background-color: orange; */
 }
 
-#diagram-paper-container {
+.view-column-container {
   width: 100%;
   height: 100%;
   /* min-height: 100vh; */
@@ -448,9 +448,10 @@ textarea {
   position: relative;
 }
 
-#diagram-header-container {
+.view-header-container {
   /* position: absolute; */
   padding: 0.5em;
+  min-height: 1.5em;
   width: 100%;
   flex-grow: 0;
   display: flex;
@@ -498,15 +499,16 @@ textarea {
   flex-grow: 1;
 }
 
-#diagram-code-editor-container {
+.sliding-code-editor-container {
   box-sizing: border-box;
   /* border-top: var(--main-border); */
   position: absolute;
   left: 0;
   width: 50%;
   height: 100%;
+  background: var(--main-bg-color);
 }
-#diagram-code-editor-divider {
+.sliding-code-editor-divider {
   position: absolute;
   right: 0;
   width: 2px;
@@ -514,12 +516,12 @@ textarea {
   background: transparent;
   /* z-index: 1; */
 }
-#diagram-code-editor-divider:hover {
+.sliding-code-editor-divider:hover {
   background: #227bd4;
   outline: 2px solid #227bd4;
 }
 
-#diagram-code-editor {
+.sliding-code-editor {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -564,7 +566,7 @@ table {
   border-spacing: 0;
 }
 
-#table-view {
+#table-container {
   /* background-color: violet; */
   padding: 1rem;
   display: flex;
@@ -610,6 +612,8 @@ table {
   border-right: var(--main-border);
   text-align: left;
 }
+
+/* FORMS */
 
 #form_component {
   padding: 1rem;

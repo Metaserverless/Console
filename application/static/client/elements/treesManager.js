@@ -349,7 +349,7 @@ const treesManager = {
       yaml: 'Yaml',
       image: 'Image',
       postgres: 'Table',
-      redis: 'Main',
+      redis: 'Table',
     };
 
     this.currentTreeNode = node;
@@ -357,7 +357,7 @@ const treesManager = {
     if (node) {
       this.setStoredFile(node);
       view = views[node.type] || 'Main';
-      if (node.type != 'folder' && ['server', 'client'].includes(node.original.section)) {
+      if (node.type != 'folder') {
         if (node.type === 'image' && this.modules.transport.accountId) {
           this.modules.events.emit('image-selected', {
             url: `/tenants/tenant${this.modules.transport.accountId}/` + node.original.path
@@ -581,8 +581,6 @@ const treesManager = {
 
     return true;
   },
-
-
 
   contextMenuAction(action, data) {
 
