@@ -69,7 +69,7 @@
         }
       } else if (item.newPath) {
         if (item.newPath !== item.path) {
-          const safeNewPath = item.section == 'client' ? sanitizePath(item.newPath) : item.newName ? sanitizePath(item.newName) : sanitizePath(item.name);
+          const safeNewPath = item.section === 'client' ? sanitizePath(item.newPath) : item.newName ? sanitizePath(item.newName) : sanitizePath(item.name);
           if (!safeNewPath) continue;
           const newItemPath = rootPath + safeNewPath;
           if (item.type !== 'folder') await writeSource(itemPath, item.source);

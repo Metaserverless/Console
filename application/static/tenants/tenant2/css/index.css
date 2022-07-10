@@ -1,15 +1,33 @@
-.header1 {
-  position: fixed;
-  top: 0;
-  min-height: 2rem;
-  background: lightblue;
+/* Some example CSS */
+
+@import url("something.css");
+
+body {
+  margin: 0;
+  padding: 3em 6em;
+  font-family: tahoma, arial, sans-serif;
+  color: #000;
 }
-.footer1 {
-  position: fixed;
-  bottom: 0;
-  min-height: 2rem;
-  background: lightblue;
+
+#navigation a {
+  font-weight: bold;
+  text-decoration: none !important;
 }
-.element1 {
+
+h1 {
+  font-size: 2.5em;
 }
-.test{}
+
+h2 {
+  font-size: 1.7em;
+}
+
+h1:before, h2:before {
+  content: "::";
+}
+
+code {
+  font-family: courier, monospace;
+  font-size: 80%;
+  color: #418A8A;
+}

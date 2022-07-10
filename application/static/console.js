@@ -20,7 +20,9 @@ window.addEventListener('load', async () => {
   window.api = window.application.metacom.api;
   await application.metacom.load('auth', 'console', 'store', 'example');
   const token = localStorage.getItem('metarhia.session.token');
+  let accountId = localStorage.getItem('metarhia.session.accountId');
   let logged = false;
+
   if (token) {
     const res = await api.auth.restore({
       token,
@@ -34,6 +36,10 @@ window.addEventListener('load', async () => {
     });
     if (res.token) {
       localStorage.setItem('metarhia.session.token', res.token);
+    }
+    if (res.accountId) {
+      accountId = res.accountId;
+      localStorage.setItem('metarhia.session.accountId', accountId);
     }
   }
 
@@ -56,7 +62,7 @@ window.addEventListener('load', async () => {
     // console.log(JSON.stringify(invoke));
   });
 
-  window.dm.initTransport(window.api);
+  window.dm.initTransport(window.api, accountId);
 
   // const {
   //   text

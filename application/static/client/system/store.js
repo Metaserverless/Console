@@ -5,6 +5,7 @@ const store = {
   data: {
     // visualViewport: document.getElementById('diagram'),
     // codeEditorTheme:'darcula',
+    accountId: 0,
     changedTreeNodes: {}
   },
 

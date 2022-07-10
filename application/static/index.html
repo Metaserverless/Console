@@ -79,21 +79,15 @@
             Main View
             <!-- <table></table> -->
           </div>
-          <div id="javascript-view" class="view-container">
-            <!-- Javascript View -->
-            <!-- <table></table> -->
-          </div>
-          <div id="markdown-view" class="view-container">
-            <!-- Markdown View -->
-            <!-- <table></table> -->
-          </div>
-          <div id="sql-view" class="view-container">
-            <!-- Postgres View -->
-            <!-- <table></table> -->
-          </div>
+          <div id="javascript-view" class="view-container"></div>
+          <div id="markdown-view" class="view-container"></div>
+          <div id="sql-view" class="view-container"></div>
           <div id="json-view" class="view-container"></div>
           <div id="css-view" class="view-container"></div>
           <div id="html-view" class="view-container"></div>
+          <div id="text-view" class="view-container"></div>
+          <div id="yaml-view" class="view-container"></div>
+          <div id="image-view" class="view-container"><img></div>
 
           <div id="diagram-view" class="view-container">
             <div id="diagram-paper-container">
@@ -175,6 +169,9 @@
   <div id="hidden-elements" class="diaplay-none">
     <div id="test_component">test component</div>
     <form id="form_component">form component</form>
+    <form id="image_upload_component">
+      <input id="image_upload_input" name="file" type="file" accept="image/*" multiple>
+    </form>
     <div id="flow-diagram-popup">
       <!-- flow diagram popup -->
       <div id="flow-diagram-popup-paper"></div>
@@ -214,9 +211,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/addon/fold/indent-fold.min.js"
     integrity="sha512-Q6g5qQfa6ko+Y+0BwAciUAq01qxgfScTPFP2Fsrr+zIrTe5Yq3tN5xaA919MmBs/1RMz/jyctknYavjc3k+/xg=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/addon/fold/xml-fold.min.js"
-    integrity="sha512-3/N6i9E1fOr1I/8Yt3KL9uFeoEcjh3ceFXf83X6vIlElMZEq0LKF1JDYsIJYaZIJeG2YD9TnGCA4KAR2bEbz/w=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/addon/lint/lint.min.js"
     integrity="sha512-fzIkwQa9H8rjoDzpZ9sMOYhgaYwh9nKALWbE1m+7wpiry9PN5OyNcZ9LySotjEysolveRyv2C9pVJ+DbEuKtmQ=="
@@ -227,6 +222,26 @@
     integrity="sha512-Rx36KK4rJrsLJhzLBmhWGdQJKoog81hHm+0qBZD6IEF2+D+CqWiuiXhtAXoxJzucl4mx8zTYCGKX6zgq6+yLGQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/mode/css/css.min.js"
+    integrity="sha512-h6AytRzmMK5vOf+hKrNYF01098/wg5Mnez3okGsZgNX1o75gXDzMmM7AB1adlMRdOEfo/A6uwC8U7Kx/Y6xjFQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/addon/hint/css-hint.min.js"
+    integrity="sha512-1BD3lo262s+DtDFoeD8+ssEL1zVJU8SHWWMtUyxfLqMV/jQDEnyQlS/CL3mD1kkLSv2hhYq1sdcA/zAPDz4JVA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/mode/xml/xml.min.js"
+    integrity="sha512-LarNmzVokUmcA7aUDtqZ6oTS+YXmUKzpGdm8DxC46A6AHu+PQiYCUlwEGWidjVYMo/QXZMFMIadZtrkfApYp/g=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/addon/hint/xml-hint.min.js"
+    integrity="sha512-+ysdToUF7KWua+mgbRPZ5hw0goAzopoVILQ4tejOckvVZV7/7a+Coqo2cTAXAaqkOemp+gz3P6hIzO5Jtys/Jg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/addon/fold/xml-fold.min.js"
+    integrity="sha512-3/N6i9E1fOr1I/8Yt3KL9uFeoEcjh3ceFXf83X6vIlElMZEq0LKF1JDYsIJYaZIJeG2YD9TnGCA4KAR2bEbz/w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/mode/htmlmixed/htmlmixed.min.js"
+    integrity="sha512-HN6cn6mIWeFJFwRN9yetDAMSh+AK9myHF1X9GlSlKmThaat65342Yw8wL7ITuaJnPioG0SYG09gy0qd5+s777w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/mode/javascript/javascript.min.js"
     integrity="sha512-I6CdJdruzGtvDyvdO4YsiAq+pkWf2efgd1ZUSK2FnM/u2VuRASPC7GowWQrWyjxCZn6CT89s3ddGI+be0Ak9Fg=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -235,6 +250,9 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/addon/lint/javascript-lint.min.js"
     integrity="sha512-8kwyIAPFqkeXy+ZFifnFBF57n5pSsXBBWuy9ME1hPCku0evC+UFNnWZOJlITFe/OMSxGi/oWaccjZ07L6YXzJA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/mode/textile/textile.min.js"
+    integrity="sha512-iU4ig8FhJ7cz3klBOjjfqv1zAY2sqgTnye+6mxxa0lEZ4ZHuuRXGRd1jo6eEHlwoh91gq0pPDCaIR98m5tkKXg=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/mode/sql/sql.min.js"
@@ -249,6 +267,10 @@
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/addon/fold/markdown-fold.min.js"
     integrity="sha512-wt5QmuOCP04rfwZuOYrr1/JH1hEzpshezbxP7sDYaiU74vQoK49s6KAIEEPl8DD3rsXtMeVg6WsDrb53q705Lw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.3/mode/yaml/yaml.min.js"
+    integrity="sha512-+aXDZ93WyextRiAZpsRuJyiAZ38ztttUyO/H3FZx4gOAOv4/k9C6Um1CvHVtaowHZ2h7kH0d+orWvdBLPVwb4g=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <!-- <script src="https://unpkg.com/node-sql-parser/umd/postgresql.umd.js"></script> -->
