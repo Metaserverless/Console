@@ -52,7 +52,7 @@ const treesManager = {
     database: {
       root: [],
       folder: [],
-      file: ['create', 'delete', 'rename'],
+      file: [],
       // custom:{}
     },
   },
@@ -593,6 +593,7 @@ const treesManager = {
 
     const node = inst.get_node(data.reference);
     if (!['create', 'createFolder', 'uploadImage'].includes(action) && !node) return console.error('No node found');
+
 
 
     let result = false;
