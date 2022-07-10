@@ -90,39 +90,56 @@
           <div id="image-view" class="view-container"><img></div>
 
           <div id="diagram-view" class="view-container">
-            <div id="diagram-paper-container">
-              <div id="diagram-header-container">
+            <div id="diagram-paper-container" class="view-column-container">
+              <div id="diagram-header-container" class="view-header-container">
                 <div id="diagram-header"></div>
                 <div id="right-top-panel">
                   <div><button id="process-run-button">Run</button></div>
                   <div id="diagram-scale">1.0</div>
                 </div>
-
               </div>
               <div id="diagram-paper"></div>
 
             </div>
-            <div id="diagram-code-editor-container">
-              <div id="diagram-code-editor"></div>
-              <div id="diagram-code-editor-divider" class="vertical-section-divider">
+            <div id="diagram-code-editor-container" class="sliding-code-editor-container">
+              <div id="diagram-code-editor"  class="sliding-code-editor"></div>
+              <div id="diagram-code-editor-divider" class="sliding-code-editor-divider vertical-section-divider">
                 <button class="code-editor-close-button code-editor-floating-button">close</button>
                 <button class="code-editor-open-button code-editor-floating-button">open</button>
               </div>
             </div>
           </div>
           <div id="table-view" class="view-container">
-            <div id="entities-list">
+            <div id="table--container" class="view-column-container">
+              <div id="table-header-container" class="view-header-container">
+                <div id="table-header"></div>
+                <div>
 
+                </div>
+              </div>
+              <div id="table-container" >
+                <div id="entities-list">
+
+                </div>
+                <div id="entity-table-container">
+                  <!-- <div id="entity-table-header">Account</div> -->
+                  <table id="entity-table">
+                    <thead id="entity-table-header">
+                      <th>No data</th>
+                    </thead>
+                    <tbody id="entity-table-body"></tbody>
+                  </table>
+                </div>
             </div>
-            <div id="entity-table-container">
-              <!-- <div id="entity-table-header">Account</div> -->
-              <table id="entity-table">
-                <thead id="entity-table-header">
-                  <th>No data</th>
-                </thead>
-                <tbody id="entity-table-body"></tbody>
-              </table>
+          </div>
+            <div id="table-code-editor-container" class="sliding-code-editor-container">
+              <div id="table-code-editor" class="sliding-code-editor"></div>
+              <div id="table-code-editor-divider" class="sliding-code-editor-divider vertical-section-divider">
+                <button class="code-editor-close-button code-editor-floating-button">close</button>
+                <button class="code-editor-open-button code-editor-floating-button">open</button>
+              </div>
             </div>
+
           </div>
 
 

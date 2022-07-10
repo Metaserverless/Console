@@ -22,9 +22,9 @@ class controllerDiagram {
       // processesSelect:document.getElementById('processes-select'),
       scale: document.getElementById('diagram-scale'),
       codeEditorContainer,
-      codeEditor: codeEditorContainer.querySelector('#diagram-code-editor'),
+      codeEditor: codeEditorContainer.querySelector('.sliding-code-editor'),
       codeEditorDivider: codeEditorContainer.querySelector(
-        '#diagram-code-editor-divider'
+        '.sliding-code-editor-divider'
       ),
       closeBtn: codeEditorContainer.querySelector('.code-editor-close-button'),
       openBtn: codeEditorContainer.querySelector('.code-editor-open-button'),
@@ -43,7 +43,7 @@ class controllerDiagram {
     //   plus: /^\s*\+\s*/,
     //   minus: /^\s*-\s*/,
     // }),
-    (this.editingLine = 0);
+    this.editingLine = 0;
     this.codeEditorShown = true;
     this.autocomleteShown = false;
     // this.processes = [{
@@ -88,7 +88,7 @@ class controllerDiagram {
     this.modules.events.listen(
       'code:editor:change',
       (node) => {
-        if (node.type == 'process') this.diagramCodeEditorChanged(node)
+        if (node.type == 'process') this.сodeEditorChanged(node)
       }
     );
 
@@ -208,7 +208,7 @@ class controllerDiagram {
     if (show) this.codeEditor.editor.refresh();
   }
 
-  diagramCodeEditorChanged(node) {
+  сodeEditorChanged(node) {
 
     if (!node.original || typeof node.original.source != 'string') return console.error('No original node');
     const value = node.original.source;

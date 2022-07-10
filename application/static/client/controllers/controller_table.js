@@ -1,38 +1,58 @@
 /* eslint-disable */
+import codeEditor from '../editors/baseCodeEditor.js';
 
 class controllerTable {
   constructor(id, modules) {
     this.modules = modules;
     this.view = 'Table';
+
+    const codeEditorContainer = document.getElementById(
+      'table-code-editor-container'
+    );
+
     this.elements = {
       entitiesList: document.getElementById('entities-list'),
       entityTable: document.getElementById('entity-table'),
       entityTableHeader: document.getElementById('entity-table-header'),
       entityTableBody: document.getElementById('entity-table-body'),
+      codeEditorContainer,
+      codeEditor: codeEditorContainer.querySelector('.sliding-code-editor'),
+      codeEditorDivider: codeEditorContainer.querySelector(
+        '.sliding-code-editor-divider'
+      ),
+      closeBtn: codeEditorContainer.querySelector('.code-editor-close-button'),
+      openBtn: codeEditorContainer.querySelector('.code-editor-open-button'),
     };
-    this.entities = {
-      Account: ['create', 'get', 'select', 'update'],
-      Carrier: ['create', 'get', 'select', 'update', 'delete'],
-      Product: ['create', 'get', 'select', 'update', 'delete'],
-      Order: ['create', 'get', 'select'],
-      Package: ['create', 'get', 'select'],
-      Payment: ['create', 'get', 'select'],
-      Refund: ['create', 'get', 'select'],
-      Reservation: ['create', 'get', 'select'],
-      Return: ['create', 'get', 'select'],
-      Session: ['get', 'select'],
-      Shipment: ['create', 'get', 'select'],
-    };
-    this.selected = '';
 
-    const entities = Object.keys(this.entities)
-      .map((key) => `<div>${key}</div>`)
-      .join('');
-    this.elements.entitiesList.innerHTML = entities;
+    this.codeEditor = new codeEditor('table-code-editor', modules, this.view, {
+      mode: 'application/ld+json',
+      value: '',
+    });
+
+    this.codeEditorShown = true;
+
+    this.elements.openBtn.addEventListener('click', () =>
+      this.showCodeEditor()
+    );
+    this.elements.closeBtn.addEventListener('click', () =>
+      this.showCodeEditor(false)
+    );
+
+    this.modules.events.listen(
+      'code:editor:change',
+      (node) => {
+        if (node.type == 'postgres' || node.type == 'redis') this.сodeEditorChanged(node)
+      }
+    );
+
+
+
     this.elements.entitiesList.addEventListener(
       'click',
       this.onEntityClick.bind(this)
     );
+
+    this.showCodeEditor(false);
   }
 
   onEntityClick(event) {
@@ -84,6 +104,64 @@ class controllerTable {
       )
       .join('');
     this.elements.entityTableBody.innerHTML = body;
+  }
+
+  clearScreen(){
+    this.elements.entitiesList.innerHTML = '';
+    this.elements.entityTableHeader.innerHTML  = '<tr><td>No data</td></tr>';
+    this.elements.entityTableBody.innerHTML = '';
+  }
+
+  showCodeEditor(show = true) {
+    // if (!show)  this.showAutocomplete(false)
+    this.codeEditorShown = show;
+    this.elements.openBtn.style.display = show ? 'none' : 'block';
+    this.elements.closeBtn.style.display = show ? 'block' : 'none';
+    // this.elements.closeBtn.style.display = show ? 'block' : 'none';
+    this.elements.codeEditor.style.display = show ? 'flex' : 'none';
+    this.elements.codeEditorContainer.style.width = show ? '' : '0';
+    this.elements.codeEditorDivider.style.width = show ? '' : '0';
+    if (show) this.codeEditor.editor.refresh();
+  }
+
+  сodeEditorChanged(node) {
+
+    if (!node.original || typeof node.original.source != 'string') return console.error('No original node');
+    const value = node.original.source;
+    this.selected = '';
+    this.clearScreen();
+    // console.log(value);
+    let json = {};
+    try {
+
+      json = JSON.parse(value);
+      // console.log(json)
+
+      this.entities = json;
+
+
+      const entities = Object.keys(this.entities)
+        .map((key) => `<div>${key}</div>`)
+        .join('');
+      this.elements.entitiesList.innerHTML = entities;
+    }
+    catch (e){
+      this.elements.entityTableHeader.innerHTML  = '<tr><td>Malformed JSON</td></tr>';
+      // console.error(e)
+    }
+
+    // console.log(value)
+
+    // let parsed = parser.parseProcess(value);
+    // this.diagram.updateGraph(parsed);
+
+    // if (change.origin == 'setValue') {
+    //   this.elements.processSaveButton.setAttribute('disabled', true);
+    // } else {
+    //   this.elements.processSaveButton.removeAttribute('disabled');
+    //   const sameLine = change.from.line == change.to.line;
+    //   if (change.origin == '+input') {} else if (change.origin == '+delete') {} else if (change.origin == 'paste') {}
+    // }
   }
 }
 

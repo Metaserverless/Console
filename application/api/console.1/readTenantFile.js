@@ -11,6 +11,8 @@
       process: './application/flow/',
       procedure: './application/domain/store/',
       rpc: './application/api/' + tenant + '.1/',
+      postgres: './application/static/tenants/' + tenant + '/db/Postgres/',
+      redis: './application/static/tenants/' + tenant + '/db/Redis/',
       client: './application/static/tenants/' + tenant + '/',
     };
 
