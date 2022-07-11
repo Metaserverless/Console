@@ -357,11 +357,7 @@ const treesManager = {
     if (node) {
       this.setStoredFile(node);
       view = views[node.type] || 'Main';
-<<<<<<< HEAD
       if (node.type != 'folder') {
-=======
-      if (node.type != 'folder' && ['server', 'client'].includes(node.original.section)) {
->>>>>>> Image uploader and database source files
         if (node.type === 'image' && this.modules.transport.accountId) {
           this.modules.events.emit('image-selected', {
             url: `/tenants/tenant${this.modules.transport.accountId}/` + node.original.path
@@ -595,11 +591,8 @@ const treesManager = {
 
     const node = inst.get_node(data.reference);
     if (!['create', 'createFolder', 'uploadImage'].includes(action) && !node) return console.error('No node found');
-<<<<<<< HEAD
 
 
-=======
->>>>>>> Image uploader and database source files
 
 
     let result = false;

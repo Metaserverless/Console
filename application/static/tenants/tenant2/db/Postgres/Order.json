@@ -11,4 +11,3 @@
   "Session": ["get", "select"],
   "Shipment": ["create", "get", "select"]
 }
-

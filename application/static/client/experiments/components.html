@@ -28,11 +28,14 @@
     <script>
         class MUI {
 
-            constructor() {
+            constructor(options = {}) {
                 this.app = document.getElementById('app');
                 this.routerView = document.getElementById('router-view');
                 this.views = {};
                 this.ctrls = {};
+                this.options = options;
+                this.dels = options.dels || {open:`{{`, close:`}}`};
+
                 this.fetchView('view1.html');
                 document.getElementById('remove').addEventListener('click', () => {
                     // console.log(this)
@@ -75,6 +78,24 @@
             register(ctrl) {
                 console.log(this.ctrls[ctrl.name], ctrl)
                 this.ctrls[ctrl.name] = ctrl;
+                if (typeof ctrl.data === 'object') {
+
+                }
+                if (typeof ctrl.init === 'function') {
+                    ctrl.init();
+                }
+                if (typeof ctrl.el !== 'undefined') {
+                    let el;
+                    if (typeof ctrl.el === 'string') el = document.getElementById(ctrl.el);
+                    else el = ctrl.el;
+                    if (el){
+                        if (el.textContent.indexOf(this.dels.start)) {
+                            
+                        }
+                    }
+                }
+
+
             }
 
 
