@@ -29,12 +29,12 @@
     flow.on('form/show', (step) => {
       console.log({ step });
       if (step.command === 'Form `Order`') {
-        const form = model.entities.get('OrderForm').fields;
+        const form = model.entities.get('OrderForm');
         console.log('form 1', form);
         context.client.emit('console/form', { step, form });
       }
       if (step.command === 'Form `Payment`') {
-        const form = model.entities.get('PaymentForm').fields;
+        const form = model.entities.get('PaymentForm');
         console.log('form 2', form);
         context.client.emit('console/form', { step, form });
       }
