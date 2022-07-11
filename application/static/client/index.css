@@ -6,6 +6,8 @@
   --light-green-color: #00ff00; /*#00e60a */
   --dark-blue-color: #009900; /*#038f0a*/
   --dark-blue-color: #005c99;
+  --light-blue-color: #1c609c;
+  --hover-blue-color: #2274bb;
   --light-yellow-color: #ffff00; /*#ffd200*/
   --light-orange-color: #ffbc5a;
   --light-red-color: #ff0000; /*#ff0000*/
@@ -41,6 +43,19 @@ textarea {
   background-color: var(--main-bg-color);
   border: var(--main-border);
   color: var(--main-text-color);
+}
+
+button, input::file-selector-button {
+  background-color: var(--light-blue-color);
+  border: none;
+  color: var(--main-text-color);
+  /* padding: 0.25em 0.1em; */
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+}
+
+button:hover{
+  background-color: var(--hover-blue-color);
 }
 
 #app {
@@ -546,7 +561,7 @@ textarea {
 }
 .code-editor-close-button,
 .code-editor-open-button {
-  top: 0.65em;
+  top: 0.85em;
 }
 .code-editor-open-button {
   left: 1em;
@@ -706,6 +721,10 @@ table {
     transition: opacity .5s ease-in-out; */
 }
 
+.close-button{
+  cursor: pointer;
+}
+
 #modal-dialog-header {
   padding: 1rem;
   border-bottom: var(--main-border);
@@ -740,6 +759,10 @@ table {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+}
+
+#modal-dialog-footer button{
+  margin-left: 1em;
 }
 
 #flow-diagram-popup {

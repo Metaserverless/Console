@@ -1,5 +1,5 @@
 <div id="view1" class="view1">
-    <span id="text1">View 1</span>
+    <span id="text1">View 1 {{test}} after</span>
     <div class="square"></div>
 </div>
 <style>
@@ -21,11 +21,15 @@
 <script>
     const view = document.getElementById('view1');
     view.classList.add('view11');
-    document.getElementById('text1').innerText = view.innerText + ' ' + JSON.stringify(mui);
+    // document.getElementById('text1').innerText = view.innerText + ' ' + JSON.stringify(mui);
     // console.log(view, mui)
     const ctrlView1 = {
         name: 'view1',
         el: document.getElementById('view1'),
+        init(){},
+        data:{
+            test:1
+        },
         test() {
             console.log('view1 test');
         }
