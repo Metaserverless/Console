@@ -63,6 +63,24 @@ let's start with
 - Ask questions in https://t.me/nodeua and post issues on
   [github](https://github.com/HowProgrammingWorks/NodejsStarterKit/issues)
 
+## Quick installation with docker
+
+- Run docker command for postgres
+
+```sh
+  docker run --name pg_test -p 5432:5432 -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -d postgres
+```
+
+- Run to prepare database
+
+```sh
+  docker cp ./db/install.sql pg_test:/install.sql
+  docker cp ./db/data.sql pg_test:/data.sql
+  docker cp ./db/structure.sql pg_test:/structure.sql
+  docker cp ./db/setup.sh pg_test:/setup.sh
+  docker exec -it pg_test sh setup.sh
+```
+
 ## License
 
 Copyright (c) 2020-2022 Metarhia contributors.
