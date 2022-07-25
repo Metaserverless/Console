@@ -1,4 +1,4 @@
-import controllerSubmenu from "../controllers/controller_submenu.js";
+import Submenu from "./Submenu.js";
 
 class Topmenu {
   constructor(id, modules, items) {
@@ -8,8 +8,8 @@ class Topmenu {
     this.menu = document.getElementById(id);
     // this.menu.addEventListener('click', this.onClick.bind(this));
     this.call_sub_menu = {
-      'export': ($root) => new controllerSubmenu($root, ['filed1', 'field2', 'field3']),
-      'placeholder':($root) =>  new controllerSubmenu($root, ['filed1', 'field2', 'field3']),
+      'export': ($root) => new Submenu($root, ['filed1', 'field2', 'field3']),
+      'placeholder':($root) =>  new Submenu($root, ['filed1', 'field2', 'field3']),
     };
     this.menu.innerHTML = this.items
       .map((item) => {
@@ -48,11 +48,11 @@ class Topmenu {
       item.addEventListener('click', this.onItemClick.bind(this));
     });
     this.menu.querySelectorAll('.menu-item-item-title').forEach((item) => {
-      item.addEventListener('mouseenter', this.onMouseEnter_.bind(this));
+      item.addEventListener('mouseenter', this.onMouseEnterSubMenu.bind(this));
     });
   }
 
-  onMouseEnter_(e) {
+  onMouseEnterSubMenu(e) {
     const $el = e.currentTarget;
     const action = $el.getAttribute('data-action');
     const controller = this.call_sub_menu[action]
@@ -61,16 +61,6 @@ class Topmenu {
       submenu.send().classList.add('active')
       $el.append(submenu.send());
     }
-    // if(action === 'export') {
-    //   const submenu = new controllerSubmenu($el, ['filed1', 'field2', 'field3']);
-    //   submenu.send().classList.add('active')
-    //   $el.append(submenu.send());
-    // }
-    // if(action === 'placeholder') {
-    //   const submenu = new controllerSubmenu($el, ['filed1', 'field2', 'field3']);
-    //   submenu.send().classList.add('active')
-    //   $el.append(submenu.send());
-    // }
   }
 
   onMouseEnter(e) {
