@@ -99,9 +99,6 @@ class Tree {
     this.instance.refresh();
     // $('#treeView').jstree(true).refresh_node("node_id_here")
   }
-
-
-
 }
 
 

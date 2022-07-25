@@ -36,12 +36,10 @@ class controllerTopHeader {
           },
           {
             title: 'Save file',
-            action: 'Ctrl+s',
             shortcut: 'Ctrl+S',
           },
           {
             title: 'Save all',
-            action: 'Ctrl+Shift+S',
             shortcut: 'Ctrl+Shift+S',
           },
           {
@@ -51,6 +49,7 @@ class controllerTopHeader {
             title: 'Export',
             action: 'export',
             shortcut: 'Ctrl+E',
+            sub_menu: true,
           },
           {
             title: 'Import',
@@ -149,6 +148,7 @@ class controllerTopHeader {
           title: 'Placeholder',
           action: 'placeholder',
           shortcut: 'Ctrl+Shift+P',
+          sub_menu: true,
         }, ],
       },
       {
@@ -157,6 +157,7 @@ class controllerTopHeader {
           title: 'Placeholder',
           action: 'placeholder',
           shortcut: 'Ctrl+Shift+P',
+          sub_menu: true,
         }, ],
       },
       {
@@ -178,18 +179,16 @@ class controllerTopHeader {
     ];
 
     this.topMenu = new Topmenu('top-menu', modules, this.items);
+
     this.elements.topLogoImage.addEventListener(
-      'click',
-      () => {
+      'click', () => {
         // console.log('top-logo-click');
         this.modules.events.emit('ide-top-logo-click', {});
       },
-    )
+    );
 
-    let CodeMirrorTheme =
-      this.modules.store.get('CodeMirrorTheme') || 'darcula';
-    this.elements.cssThemeSwitcher.innerHTML =
-      '<option disabled>Select a theme</option>' +
+    let CodeMirrorTheme = this.modules.store.get('CodeMirrorTheme') || 'darcula';
+    this.elements.cssThemeSwitcher.innerHTML = '<option disabled>Select a theme</option>' +
       css_themes.map((t) => `<option value="${t}">${t}</option>`).join('');
     this.elements.cssThemeSwitcher.value = CodeMirrorTheme;
     this.elements.cssThemeSwitcher.addEventListener(

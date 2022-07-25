@@ -1,0 +1,40 @@
+<div id="view1" class="view1">
+    <span id="text1">View 1 {{test}} after</span>
+    <div class="square"></div>
+</div>
+<style>
+    .view1 {
+        background-color: #f00;
+    }
+
+    .view11 {
+        border: 1px solid #000;
+    }
+
+    .square {
+        width: 100px;
+        height: 100px;
+        background-color: #0f0;
+    }
+
+</style>
+<script>
+    const view = document.getElementById('view1');
+    view.classList.add('view11');
+    // document.getElementById('text1').innerText = view.innerText + ' ' + JSON.stringify(mui);
+    // console.log(view, mui)
+    const ctrlView1 = {
+        name: 'view1',
+        el: document.getElementById('view1'),
+        init(){},
+        data:{
+            test:1
+        },
+        test() {
+            console.log('view1 test');
+        }
+
+    };
+    mui.register(ctrlView1);
+
+</script>
