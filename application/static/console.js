@@ -10,9 +10,6 @@ class Application {
     const protocol = location.protocol === 'http:' ? 'ws' : 'wss';
     this.metacom = Metacom.create(`${protocol}://${location.host}/api`);
   }
-
-
-
 }
 
 window.addEventListener('load', async () => {

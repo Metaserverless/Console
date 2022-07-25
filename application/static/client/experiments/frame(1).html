@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>B-OS Frame Test</title>
+  <link rel="icon" href="/favicon.png" sizes="any" type="image/png">
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="connect-src 'self' wss:">
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.js"></script>
+
+
+  <style>
+    :root {
+      --system-border: 1px solid #cdcdcd;
+      --duration: 2s;
+      --transition: 3s;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+
+      background: #424143;
+      font-family: Roboto, Arial, Helvetica, sans-serif;
+      color: #ffffff;
+    }
+
+    #app {
+      width: 100%;
+      height: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      /* justify-content: center;
+        align-items: center; */
+    }
+
+    .system-screen {
+
+      background: #ccc;
+      min-height: 100vh;
+    }
+
+    .system-screen {
+
+      display: flex;
+      flex-direction: column;
+
+    }
+
+    .system-screen.show {}
+
+    .system-offcanvas-container {
+
+      transition: var(--transition);
+      overflow: hidden;
+      background: green;
+      display: flex;
+    }
+
+
+
+
+    .system-offcanvas {
+      transition: transform var(--transition),
+        margin-top var(--transition),
+        margin-bottom var(--transition),
+        opacity var(--transition);
+
+      background: #ffffff;
+
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+
+    }
+
+    .system-offcanvas.show {}
+
+    .system-offcanvas.fixed {}
+
+    .system-top-offcanvas-container {
+      top: 0;
+      z-index: 1;
+      width: 100%;
+    }
+
+    .system-top-offcanvas-container::after {
+      content: 'v';
+      display: block;
+      padding: 10px;
+      position: absolute;
+      background: red;
+      left: 50%;
+      bottom: 0;
+      margin-top: 40px;
+    }
+
+
+    .system-bottom-offcanvas-container {
+      bottom: 0;
+      z-index: 1;
+      width: 100%;
+
+    }
+
+    .system-left-offcanvas-container {
+      left: 0;
+      width: 200px;
+
+    }
+
+    .system-right-offcanvas-container {
+      right: 0;
+      width: 200px;
+
+    }
+
+
+
+
+    .system-offcanvas-top {
+      transform: translateY(-100%);
+      width: 100%;
+
+    }
+
+    .system-offcanvas-top.show {}
+
+
+    .system-offcanvas-top {
+      transform: translateY(-100%);
+      width: 100%;
+      height: 100%;
+
+    }
+
+    .system-offcanvas-start {
+      transform: translateX(-100%);
+      width: 200px;
+      height: 100%;
+      min-height: 100%;
+    }
+
+    .system-offcanvas-end {
+      transform: translateX(100%);
+      width: 200px;
+      height: 100%;
+      min-height: 100%;
+    }
+
+    .system-offcanvas-bottom {
+      transform: translateY(100%);
+      width: 100%;
+      height: 100%;
+    }
+
+
+    .system-top {
+      border-bottom: var(--system-border);
+      top: 0;
+    }
+
+    .system-top-one {
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-content: center;
+    }
+
+    .system-top-two {
+      padding: 10px;
+    }
+
+    .system-center {
+      display: flex;
+      flex-grow: 1;
+
+
+      background: green;
+    }
+
+    .system-center-left {
+      border-right: var(--system-border);
+
+      padding: 10px;
+      left: 0;
+    }
+
+    .system-center-center {
+
+
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      padding: 10px;
+      background: lime;
+      border: 2px solid blue;
+      align-content: center;
+      justify-content: center;
+
+
+
+
+    }
+
+    .system-center-center-content {
+
+      background: yellow;
+      display: flex;
+      justify-content: center;
+    }
+
+    .system-center-right {
+      border-left: var(--system-border);
+
+      padding: 10px;
+      right: 0;
+    }
+
+    .system-bottom {
+      border-top: var(--system-border);
+      bottom: 0;
+    }
+
+    .system-bottom-one {
+      padding: 10px;
+    }
+
+    .system-bottom-two {
+      padding: 10px;
+    }
+
+
+
+    .notion-sidebar-container {
+
+      flex-grow: 0;
+      flex-shrink: 0;
+      pointer-events: none;
+      position: relative;
+      z-index: 99;
+      background: rgb(247, 246, 243);
+      transition: box-shadow 300ms ease-in 0s;
+      width: 0px;
+
+    }
+
+    .notion-sidebar-container.static {
+      flex-grow: 0;
+      flex-shrink: 0;
+      pointer-events: none;
+      position: relative;
+      z-index: 99;
+      background: rgb(247, 246, 243);
+      transition: box-shadow 300ms ease-in 0s;
+      width: 240px;
+    }
+
+    .notion-sidebar-container div {
+      color: rgba(25, 23, 17, 0.6);
+      font-weight: 500;
+      height: 100%;
+    }
+
+    .notion-sidebar-container div div {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      bottom: 0px;
+      display: flex;
+      flex-direction: column;
+      width: 0px;
+      overflow: visible;
+      z-index: 9;
+      pointer-events: none;
+    }
+
+    .notion-sidebar {
+
+      display: flex;
+      flex-direction: column;
+      height: auto;
+      position: relative;
+      pointer-events: none;
+      max-height: calc(100vh - 120px);
+      width: 240px;
+      opacity: 0;
+      transform: translateX(-220px) translateY(60px) translateZ(0px);
+
+    }
+
+    .notion-sidebar.show {
+      display: flex;
+      flex-direction: column;
+      height: auto;
+      position: relative;
+      pointer-events: auto;
+      max-height: calc(100vh - 120px);
+      width: 240px;
+      opacity: 1;
+      transform: translateY(60px) translateZ(0px);
+    }
+
+  </style>
+
+</head>
+
+<body>
+  <div id="app">
+
+    <div class="system-screen" :class="{show}">
+      <!-- <div style="display: flex; height: 100%; background: #999999;">
+      <button>Test</button>
+    </div> -->
+      <div class="system-offcanvas-container system-top-offcanvas-container"
+        :class="{show:show || offcanvas.top.show, fixed:fixed || offcanvas.top.fixed}">
+        <div class="system-top system-offcanvas system-offcanvas-top" ref="systemTop">
+          <div class="offcanvas-header">
+            <div class="offcanvas-title">Top</div>
+            <div>
+              <button type="button" @click="fixedOffcanvas('top', false)">f</button>
+              <button type="button" class="btn-close text-reset" @click="openOffcanvas('top', false)"></button>
+            </div>
+
+          </div>
+
+          <div class="offcanvas-body">
+            {{offcanvas.top.fixed}} {{offcanvas.top.show}}
+          </div>
+        </div>
+      </div>
+
+      <div class="system-center">
+        <div class="system-offcanvas-container system-left-offcanvas-container"
+          :class="{show:show || offcanvas.start.show, fixed:fixed || offcanvas.start.fixed}">
+          <div class="system-center-left system-offcanvas system-offcanvas-start" ref="systemCenterStart">
+            <div class="offcanvas-header">
+              <div class="offcanvas-title">Start</div>
+              <div>
+                <button type="button" @click="fixedOffcanvas('start', false)">f</button>
+                <button type="button" class="btn-close text-reset" @click="openOffcanvas('start', false)"></button>
+              </div>
+            </div>
+            <div class="offcanvas-body">
+              <div>{{offcanvas.start.fixed}}</div>
+              <div>{{offcanvas.start.show}}</div>
+              <div><input class="form-control" /></div>
+            </div>
+            <div class="offcanvas-footer">footer</div>
+          </div>
+        </div>
+
+
+        <div class="system-center-center">
+
+
+          <div class="system-center-center-content">
+            <!-- <div style="display:flex; justify-content: space-between;">
+                <div>system-center-center</div>
+                <div>system-center-center</div>
+             </div>    -->
+            <div><button @click="open()">Open</button> {{show}} <button @click="setFixed()">Set fixed</button>{{fixed}}
+            </div>
+          </div>
+        </div>
+
+        <div class="system-offcanvas-container system-right-offcanvas-container"
+          :class="{show:show || offcanvas.end.show, fixed:fixed || offcanvas.end.fixed}">
+          <div class="system-center-right system-offcanvas system-offcanvas-end" ref="systemCenterEnd">
+            <div class="offcanvas-header">
+              <div class="offcanvas-title">End</div>
+              <div>
+                <button type="button" @click="fixedOffcanvas('end', false)">f</button>
+                <button type="button" class="btn-close text-reset" @click="openOffcanvas('end', false)"></button>
+              </div>
+            </div>
+            <div class="offcanvas-body">
+              <div>{{offcanvas.end.fixed}}</div>
+              <div>{{offcanvas.end.show}}</div>
+              <div><input class="form-control" /></div>
+            </div>
+            <div class="offcanvas-footer">footer</div>
+          </div>
+        </div>
+      </div>
+      <div class="system-offcanvas-container system-bottom-offcanvas-container"
+        :class="{show:show || offcanvas.bottom.show, fixed:fixed || offcanvas.bottom.fixed}">
+        <div class="system-bottom system-offcanvas system-offcanvas-bottom" ref="systemBottom">
+          <div class="offcanvas-header">
+            <div class="offcanvas-title">Bottom</div>
+            <div>
+              <button type="button" @click="fixedOffcanvas('bottom', false)">f</button>
+              <button type="button" class="btn-close text-reset" @click="openOffcanvas('bottom', false)"></button>
+            </div>
+          </div>
+          <div class="offcanvas-body">
+            <div>{{offcanvas.bottom.fixed}}</div>
+            <div>{{offcanvas.bottom.show}}</div>
+          </div>
+
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+  <script>
+    const frame = {
+      name: 'HomeView',
+      components: {
+
+      },
+      data() {
+        return {
+          hide: false,
+          show: false,
+          fixed: true,
+          offcanvas: {
+            top: {
+              show: false,
+              fixed: false,
+              height: 107,
+              proximity: 20
+            },
+            start: {
+              show: false,
+              fixed: false,
+              width: 200,
+              proximity: 20
+            },
+            end: {
+              show: false,
+              fixed: false,
+              width: 200,
+              proximity: 20
+            },
+            bottom: {
+              show: false,
+              fixed: false,
+              height: 107,
+              proximity: 20
+            }
+          }
+        }
+      },
+
+      async created() {
+
+      },
+      mounted() {
+
+
+        this.offcanvas.top = {
+          show: false,
+          fixed: false,
+          el: this.$refs['systemTop'],
+          rect: {
+            height: 107
+          },
+          height: 0,
+          proximity: 20
+        };
+        this.offcanvas.start = {
+          show: false,
+          fixed: false,
+          el: this.$refs['systemCenterStart'],
+          rect: {
+            width: 200
+          },
+          width: 200,
+          proximity: 20
+        };
+        this.offcanvas.end = {
+          show: false,
+          fixed: false,
+          el: this.$refs['systemCenterEnd'],
+          rect: {
+            width: 200
+          },
+          width: 200,
+          proximity: 20
+        };
+        this.offcanvas.bottom = {
+          show: false,
+          fixed: false,
+          el: this.$refs['systemBottom'],
+          rect: {
+            height: 107
+          },
+          height: 0,
+          proximity: 20
+        };
+        // document.addEventListener('mousemove', this.checkMouseoPosition);
+        this.open(true);
+      },
+      methods: {
+        open(show) {
+
+          this.show = show != undefined ? show : !this.show;
+
+          this.manageOffcanvas();
+
+          // console.log('open', topHeight, bottomHeight, this.show);
+        },
+
+        openOffcanvas(position, show) {
+          console.log('open', position);
+          this.offcanvas[position].show = show == undefined ? !this.offcanvas[position].show : show;
+          this.manageOffcanvas();
+        },
+        fixedOffcanvas(position, fixed) {
+          console.log('fixed', position);
+          this.offcanvas[position].fixed = fixed == undefined ? !this.offcanvas[position].fixed : fixed;
+          this.manageOffcanvas();
+        },
+
+        setFixed() {
+          this.fixed = !this.fixed;
+          this.manageOffcanvas();
+        },
+
+        manageOffcanvas() {
+
+          // const offcanvas = document.querySelectorAll('.system-offcanvas');
+
+
+          if (!this.offcanvas['top'].height) this.offcanvas['top'].height = this.offcanvas['top'].el
+            .getBoundingClientRect().height;
+          if (!this.offcanvas['bottom'].height) this.offcanvas['bottom'].height = this.offcanvas['bottom'].el
+            .getBoundingClientRect().height;
+
+          for (let id in this.offcanvas) {
+            if (!this.offcanvas[id].el) console.log(id);
+            let o = this.offcanvas[id].el,
+              c = o.parentNode,
+              // rect = o.getBoundingClientRect(),
+              show = this.show || this.offcanvas[id].show,
+              fixed = this.fixed || this.offcanvas[id].fixed;
+
+
+
+            c.style.position = fixed ? 'fixed' : 'relative';
+            o.style.transform = show ? 'translate(0)' : '';
+
+
+            if (id == 'top' || id == 'bottom') {
+              //  console.log(rect.height)
+
+              c.style.maxHeight = (show ? this.offcanvas[id].height : 0) + 'px';
+              // if (c.classList.contains('system-top-offcanvas-container')) topHeight = rect.height;
+              // else bottomHeight = rect.height;
+            } else {
+              //  console.log(rect.width)
+              //  yOffcanvas.push(o);
+              c.style.height = fixed ? '100%' : 'auto';
+              c.style.width = (show ? this.offcanvas[id].width : 0) + 'px';
+              o.style.width = this.offcanvas[id].width + 'px';
+              c.style.paddingTop = (fixed && show ? this.offcanvas.top.height : 0) + 'px';
+              c.style.paddingBottom = (fixed && show ? this.offcanvas.bottom.height : 0) + 'px';
+            }
+          }
+
+          // for (let o of yOffcanvas){
+          // o.style.marginTop = (this.fixed && this.show ? this.offcanvas.top.height : 0) + 'px';
+          // o.style.marginBottom = (this.fixed && this.show ? this.offcanvas.bottom.height : 0)  + 'px';
+
+
+          // }
+        },
+
+        offcanvasClass(position) {
+          if (!this.show) return '';
+          if (!this.offcanvas[position]) return '';
+          return 'show';
+        },
+
+        checkMouseoPosition(event) {
+          // const proximity = 20;
+          let changed = false;
+
+          for (let id in this.offcanvas) {
+            if (!this.fixed && !this.offcanvas[id].fixed) continue;
+            if (id == 'top') {
+              if (!this.offcanvas[id].show && event.y < this.offcanvas[id].proximity) {
+                this.offcanvas[id].show = true;
+                changed = true;
+              } else if (this.offcanvas[id].show && event.y > this.offcanvas[id].rect.height) {
+                this.offcanvas[id].show = false;
+                changed = true;
+              }
+            }
+
+
+
+          }
+          if (changed) this.manageOffcanvas();
+
+
+
+          // if (!this.fixed)
+          // if (event.x < proximity) {
+          //     this.openOffcanvas('start', true);
+          // }
+          // else if (event.x > window.innerWidth - proximity) {
+          //     this.openOffcanvas('end', true);
+          // }
+          // else if (event.y < proximity) {
+          //     this.openOffcanvas('top', true);
+          // }
+          // else if (event.y > window.innerHeight - proximity) {
+          //     this.openOffcanvas('bottom', true);
+          // }
+          // else {
+          //     this.openOffcanvas('start', false);
+          //     this.openOffcanvas('end', false);
+          //     this.openOffcanvas('top', false);
+          //     this.openOffcanvas('bottom', false);
+          // }
+        }
+      },
+      watch: {
+        offcanvas: {
+          handler(newVal, oldVal) {
+            console.log(newVal, oldVal);
+          },
+          deep: true
+        }
+      }
+
+    }
+
+  </script>
+</body>
+
+</html>

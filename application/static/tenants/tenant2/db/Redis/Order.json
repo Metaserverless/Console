@@ -1,5 +1,0 @@
-{
-  "Account": ["create", "get", "select", "update"],
-  "Carrier": ["create", "get", "select", "update", "delete"],
-  "Product": ["create", "get", "select", "update", "delete"]
-}

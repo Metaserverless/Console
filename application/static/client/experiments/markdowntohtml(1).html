@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<!-- saved from url=(0060)http://localhost:8001/client/experiments/markdowntohtml.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Markdown To HTML</title>
+    <link rel="icon" href="http://localhost:8001/favicon.png" sizes="any" type="image/png">
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
+    <style>
+        img {
+            background-color: #e6e6e6;
+        }
+        .Box-body:last-of-type {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 6px;
+            border-bottom-left-radius: 6px;
+        }
+
+        .p-xl-6 {
+            padding: 40px !important;
+        }
+
+        .p-5 {
+            padding: 32px !important;
+        }
+
+        .Box-body {
+            padding: 16px;
+            border-bottom: 1px solid var(--color-border-default);
+        }
+
+        .readme .markdown-body,
+        .readme .plain {
+            word-wrap: break-word;
+        }
+
+        .markdown-body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            font-size: 16px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .container-lg {
+            max-width: 1012px;
+            margin-right: auto;
+            margin-left: auto;
+        }
+
+        article,
+        aside,
+        details,
+        figcaption,
+        figure,
+        footer,
+        header,
+        main,
+        menu,
+        nav,
+        section {
+            display: block;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .markdown-body::before {
+            display: table;
+            content: "";
+        }
+
+        .markdown-body>*:first-child {
+            margin-top: 0 !important;
+        }
+
+        .markdown-body table {
+            display: block;
+            width: 100%;
+            width: max-content;
+            max-width: 100%;
+            overflow: auto;
+        }
+
+        .markdown-body p,
+        .markdown-body blockquote,
+        .markdown-body ul,
+        .markdown-body ol,
+        .markdown-body dl,
+        .markdown-body table,
+        .markdown-body pre,
+        .markdown-body details {
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+
+        table {
+            border-spacing: 0;
+            border-collapse: collapse;
+        }
+
+        .markdown-body table tr {
+            background-color: #ffffff;
+            border-top: 1px solid hsla(210, 18%, 87%, 1);
+        }
+
+        .markdown-body table th,
+        .markdown-body table td {
+            padding: 6px 13px;
+            border: 1px solid #d0d7de;
+        }
+
+        .markdown-body table th {
+            font-weight: 600;
+        }
+
+        td,
+        th {
+            padding: 0;
+        }
+
+        .markdown-body .anchor {
+            float: left;
+            padding-right: 4px;
+            margin-left: -20px;
+            line-height: 1;
+        }
+
+        .markdown-body h1 {
+            padding-bottom: 0.3em;
+            font-size: 2em;
+            border-bottom: 1px solid var(--color-border-muted);
+        }
+
+        .markdown-body h1,
+        .markdown-body h2,
+        .markdown-body h3,
+        .markdown-body h4,
+        .markdown-body h5,
+        .markdown-body h6 {
+            margin-top: 24px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            line-height: 1.25;
+        }
+
+        .markdown-body ul,
+        .markdown-body ol {
+            padding-left: 2em;
+        }
+
+        .markdown-body p,
+        .markdown-body blockquote,
+        .markdown-body ul,
+        .markdown-body ol,
+        .markdown-body dl,
+        .markdown-body table,
+        .markdown-body pre,
+        .markdown-body details {
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+
+        ul,
+        ol {
+            padding-left: 0;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .markdown-body h2 {
+            padding-bottom: 0.3em;
+            font-size: 1.5em;
+            border-bottom: 1px solid hsla(210, 18%, 87%, 1);
+        }
+
+        .markdown-body h1,
+        .markdown-body h2,
+        .markdown-body h3,
+        .markdown-body h4,
+        .markdown-body h5,
+        .markdown-body h6 {
+            margin-top: 24px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            line-height: 1.25;
+        }
+
+        .markdown-body p,
+        .markdown-body blockquote,
+        .markdown-body ul,
+        .markdown-body ol,
+        .markdown-body dl,
+        .markdown-body table,
+        .markdown-body pre,
+        .markdown-body details {
+            margin-top: 0;
+            margin-bottom: 16px;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .markdown-body blockquote {
+            padding: 0 1em;
+            color: #57606a;
+            border-left: 0.25em solid #d0d7de;
+        }
+
+        .overflow-auto {
+            overflow: auto !important;
+        }
+
+        .position-relative {
+            position: relative !important;
+        }
+
+        .markdown-body .highlight pre,
+        .markdown-body pre {
+            padding: 16px;
+            overflow: auto;
+            font-size: 85%;
+            line-height: 1.45;
+            background-color: #f6f8fa;
+            border-radius: 6px;
+        }
+
+        .markdown-body pre {
+            word-wrap: normal;
+        }
+
+    </style>
+
+</head>
+
+<body data-new-gr-c-s-check-loaded="14.1068.0" data-gr-ext-installed="" cz-shortcut-listen="true" data-gr-ext-disabled="forever">
+
+
+
+
+
+    <div id="readme" class="Box-body readme blob js-code-block-container p-5 p-xl-6 gist-border-0">
+
+
+
+            <article class="markdown-body entry-content container-lg" itemprop="text">
+                <div id="html" style="padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px solid red;"></div>
+
+                <table>
+                <thead>
+                <tr>
+                <th>title</th>
+                <th>description</th>
+                <th>keywords</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                <td><div dir="auto">page title</div></td>
+                <td><div dir="auto">page description</div></td>
+                <td><div dir="auto">word1, word2, word3</div></td>
+                </tr>
+                </tbody>
+              </table>
+
+              <h1 dir="auto">Heading 1</h1>
+              <ul dir="auto">
+              <li><a href="/metarhia/ExampleWebSite/blob/main/application/resources/content/section1/index.en.md">Link</a></li>
+              </ul>
+              <h2 dir="auto">Heading 2</h2>
+              <p dir="auto">Page text with <strong>bold</strong>, <em>italic</em>, <em><strong>bold and italic</strong></em>, <del>strikethrough</del>, <code>code</code>.</p>
+              <blockquote>
+              <p dir="auto">Quote example</p>
+              </blockquote>
+              <div class="snippet-clipboard-content notranslate position-relative overflow-auto"><pre class="notranslate"><code>// Code example
+              const fs = require('fs');
+              console.log({ fs });
+              </code></pre><div class="zeroclipboard-container position-absolute right-0 top-0">
+
+                </div></div>
+                <h2 dir="auto">List</h2>
+                <ul dir="auto">
+              <li>List item 1</li>
+              <li>List item 2</li>
+              <li>List item 3</li>
+              </ul>
+              <h2 dir="auto">Ordered list</h2>
+              <ol dir="auto">
+              <li>List item 1</li>
+              <li>List item 2</li>
+              <li>List item 3</li>
+              </ol>
+              <h2 dir="auto">List with sublists</h2>
+              <ol dir="auto">
+              <li>Level 1
+              <ul dir="auto">
+              <li>Level 2
+              <ul dir="auto">
+              <li>Level 3</li>
+              </ul>
+              </li>
+              </ul>
+              </li>
+              </ol>
+              <h2 dir="auto">Image</h2>
+              <p dir="auto">
+                <a target="_blank" rel="noopener noreferrer" href="https://camo.githubusercontent.com/6b085d71e0d5e29e630628b712e6300bcc805fd8326e0d4b6735f6c88485497c/68747470733a2f2f7777772e676f6f676c652e636f6d2f696d616765732f6272616e64696e672f676f6f676c656c6f676f2f31782f676f6f676c656c6f676f5f6c696768745f636f6c6f725f32373278393264702e706e67">
+                    <img src="https://camo.githubusercontent.com/6b085d71e0d5e29e630628b712e6300bcc805fd8326e0d4b6735f6c88485497c/68747470733a2f2f7777772e676f6f676c652e636f6d2f696d616765732f6272616e64696e672f676f6f676c656c6f676f2f31782f676f6f676c656c6f676f5f6c696768745f636f6c6f725f32373278393264702e706e67" alt="alt text" data-canonical-src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png" style="max-width: 100%;">
+                </a>
+                </p>
+
+
+           </article>
+    </div>
+
+    <script type="module">
+
+        const tickplate =
+    (strings, ...keys) =>
+    (values) => {
+        const result = [strings[0]];
+        for (let i = 0; i < keys.length; i++) {
+            const key = keys[i];
+            result.push(values[key], strings[i + 1]);
+        }
+        return result.join('');
+    };
+    const testTickPlate = function(){
+        const data = {
+            hello: 'Ave!',
+            myFriend: {
+                name: 'Marcus Aurelius',
+                toString() {
+                return this.name;
+                },
+            },
+            positions: ['emperor', 'philosopher', 'writer'],
+            };
+
+            const templ = tickplate`${'hello'} ${'myFriend'}, great ${'positions'} of Rome`;
+
+            console.log(templ(data));
+    }
+
+
+        const markdown = `---
+title: page title
+description: page description
+keywords: word1, word2, word3
+---
+
+# Heading 1
+
+- [Link](section1/index.en.md)
+
+## Heading 2
+
+Page text with **bold**, *italic*, ***bold and italic***, ~~strikethrough~~, \`code\`.
+
+> Quote example
+\`
+        \`\`
+        // Code example
+        const fs = require('fs');
+        console.log({
+            fs
+        });
+        \`\`
+        \`
+
+## List
+
+- List item 1
+- List item 2
+- List item 3
+
+## Ordered list
+
+1. List item 1
+2. List item 2
+3. List item 3
+
+## List with sublists
+
+1. Level 1
+   - Level 2
+     - Level 3
+
+## Image
+
+![alt text](https://www.google.com/images/branding/googlelogo/1x/googlelogo_light_color_272x92dp.png)`;
+
+
+const html = document.getElementById('html');
+const pre = document.getElementById('pre');
+const parser = new DOMParser();
+
+        const parse = function(str) {
+
+            const fragment = new DOMParser().parseFromString(str, 'text/html');
+            const tags = [
+                ['##', '\n', '<h2>', '</h2>', false],
+                ['#', '\n', '<h1>', '</h1>', false],
+                ['**', '**', '<strong>', '</strong>', true],
+                ['*', '*', '<em>', '</em>', true],
+                ['~~', '~~', '<del>', '</del>', true],
+                ['``', '``', '<pre><code>', '</code></pre>', true],
+                ['`', '`', '<code>', '</code>', true],
+                ['>', '\n', '<blockquote>', '</blockquote>', false],
+                ['-', '\n', '<li>', '</li>', true, ['\n\n', '\n\n', '<ul>', '</ul>']],
+                ['\n\n', '\n\n', '<p>', '</p>', true],
+        ]
+            const stack = [];
+            let n = 0, length = str.length;
+            let res = '', tag, close, found, ul;
+
+            while (n < length) {
+                // console.log(str.charAt(n), str.charCodeAt(n));
+                if (close && str.substr(n, close[1].length) === close[1]){
+                    res += close[3];
+                    if (close[5] && str.substr(n, close[5][1].length) === close[5][1]){
+                        res + close[5][3];
+                    }
+                    stack.pop();
+                    if(close[4]) n += close[1].length;
+                    if(stack.length > 0){
+                        close = stack[stack.length - 1];
+                    } else {
+                        close = null;
+                    }
+                }
+                else {
+                    found = false;
+                    for (tag of tags) {
+                        if (str.substr(n, tag[0].length) === tag[0]) {
+                            if (tag[5] && str.substr(n-tag[5][0].length, tag[5][0].length) === tag[5][0]){
+                                res + tag[5][2];
+                            }
+                            res += tag[2];
+                            stack.push(tag);
+                            close = tag;
+                            found = true;
+                            n += tag[0].length;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        res += str[n];
+                        n++;
+                    }
+                }
+
+            }
+            console.log(res);
+
+            try {
+                const doc = parser.parseFromString(res, "text/html");
+                const errorNode = doc.querySelector('parsererror');
+                if (errorNode) {
+                // parsing failed
+                } else {
+                    if (doc.body) html.innerHTML = doc.body.innerHTML;
+                }
+            }
+            catch(e){
+                console.log(e);
+            }
+        };
+
+        const showdownConverter = new showdown.Converter();
+            // pre.innerHTML = res;
+
+        window.addEventListener('load', ()=>{
+            let str = markdown;
+            str =
+`\`
+
+\``;
+str = "# hello\n*world*";
+            parse(str);
+            const m = marked.parse(str);
+            console.log(m);
+            const s = showdownConverter.makeHtml(str);
+            console.log(s);
+
+            // console.log(window["markdown"])
+
+        })
+
+
+
+
+    </script>
+
+
+
+
+</body></html>

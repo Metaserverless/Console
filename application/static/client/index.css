@@ -144,27 +144,76 @@ button:hover{
 }
 
 .menu-item-item {
+  position: relative;
   display: flex;
   align-items: start;
   justify-content: center;
   /* height: 40px; */
   color: var(--main-text-color);
-
   width: 100%;
   min-width: 100%;
 }
+.sub-menu::before {
+  content: '▶ ';
+  font-size: 80%;
+  color: green;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  z-index: -10;
+}
+
+
+.sub_menu-fields {
+  border-radius: 0.5rem;
+ display: none;
+ position: absolute;
+ top: 0;
+ background: var(--main-bg-color);
+ font-size: 80%;
+ left:195px;
+ width:195px;
+ border: var(--main-border);
+
+}
+
+.sub_menu-fields ul {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  flex-grow: 1;
+}
+.sub_menu-fields ul li{
+  list-style: none;
+  text-align: left;
+  font-size: 1.38em;
+  margin: 0 5px;
+  padding: 5px 10px;
+  font-weight: 300;
+  width: 100%;
+  border-bottom:#fff;
+  border-width: 190px ;
+  border-radius: 2px;
+}
+
+.sub_menu-fields.active {
+  display: block;
+ }
 
 .menu-item-item-title {
   white-space: nowrap;
   display: flex;
   width: 100%;
   min-width: 100%;
-  padding: 0.3em 1em;
+  padding: 0.3em 1.4em;
   cursor: pointer;
   justify-content: space-between;
 }
 
-.menu-item-item-title:hover {
+.menu-item-item-title:hover, .sub_menu-fields ul li:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
