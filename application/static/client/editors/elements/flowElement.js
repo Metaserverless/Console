@@ -272,7 +272,7 @@ const FlowElement = {
       finalization: '#e6c456',
     };
     const width = 150,
-      height = 60;
+        height = 60;
     const text = node.name;
     const type = node.type;
 

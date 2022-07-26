@@ -50,6 +50,19 @@ class controllerTopHeader {
             action: 'export',
             shortcut: 'Ctrl+E',
             sub_menu: true,
+            sub_items: [
+              {
+                title: 'example-sub-menu',
+                shortcut: 'Ctrl+I',
+              },
+              {
+                type: 'divider',
+              },
+              {
+                title: 'example-sub-menu2',
+                shortcut: 'Ctrl+O',
+              },
+            ]
           },
           {
             title: 'Import',
@@ -149,7 +162,21 @@ class controllerTopHeader {
           action: 'placeholder',
           shortcut: 'Ctrl+Shift+P',
           sub_menu: true,
-        }, ],
+          sub_items: [
+            {
+              title: 'example-sub-menu',
+              shortcut: 'Ctrl+I',
+            },
+            {
+              type: 'divider',
+            },
+            {
+              title: 'example-sub-menu2',
+              shortcut: 'Ctrl+O',
+            },
+          ]
+        }, 
+      ],
       },
       {
         title: 'Run',
@@ -158,6 +185,19 @@ class controllerTopHeader {
           action: 'placeholder',
           shortcut: 'Ctrl+Shift+P',
           sub_menu: true,
+          sub_items: [
+            {
+              title: 'example-sub-menu',
+              shortcut: 'Ctrl+I',
+            },
+            {
+              type: 'divider',
+            },
+            {
+              title: 'example-sub-menu2',
+              shortcut: 'Ctrl+O',
+            },
+          ]
         }, ],
       },
       {

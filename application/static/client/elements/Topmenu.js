@@ -7,9 +7,19 @@ class Topmenu {
     this.items = items;
     this.menu = document.getElementById(id);
     // this.menu.addEventListener('click', this.onClick.bind(this));
+    this.sub_menu_items = this.items.reduce((acc, fields) => {
+        const {items} = fields;
+        items.forEach((item) => {
+          if(item.sub_items) {
+            acc[item.action] = item.sub_items
+          }
+        })
+        return acc
+    }, {})
+    console.log(this.sub_menu_items);
     this.call_sub_menu = {
-      'export': ($root) => new Submenu($root, ['filed1', 'field2', 'field3']),
-      'placeholder':($root) =>  new Submenu($root, ['filed1', 'field2', 'field3']),
+      'export': ($root, fields=['filed1', 'field2', 'field3']) => new Submenu($root, fields),
+      'placeholder':($root, fields=['filed1', 'field2', 'field3']) =>  new Submenu($root, fields),
     };
     this.menu.innerHTML = this.items
       .map((item) => {
@@ -55,10 +65,10 @@ class Topmenu {
   onMouseEnterSubMenu(e) {
     const $el = e.currentTarget;
     const action = $el.getAttribute('data-action');
-    const controller = this.call_sub_menu[action]
+    const controller = this.call_sub_menu[action];
     if(controller) {
-      const submenu = controller($el);
-      submenu.send().classList.add('active')
+      const submenu = controller($el, this.sub_menu_items[action]);
+      submenu.send().classList.add('active');
       $el.append(submenu.send());
     }
   }
