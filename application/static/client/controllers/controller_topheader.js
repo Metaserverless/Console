@@ -197,6 +197,8 @@ class controllerTopHeader {
       this.switchCssTheme.bind(this)
     );
     this.elements.cssThemeSwitcher.dispatchEvent(new Event('change'));
+    this.modules.events.listen('Ctrl+l', this.disableLineNumbers.bind(this));
+    this.modules.store.set('disableLineNumbers', false);
   }
 
   switchCssTheme() {
@@ -208,6 +210,19 @@ class controllerTopHeader {
 
   action(type) {
     this.modules.events.emit(type, {});
+  }
+
+  disableLineNumbers() {
+    const parentElements = document.querySelectorAll('.CodeMirror-gutter-wrapper');
+    let flag = true;
+    for (const parent of parentElements) {
+      const childElements = parent.children;
+      for (const child of childElements) {
+       flag = child.classList.toggle('display-none');
+      }
+    }
+    this.modules.store.set('displayLineNumbers', flag);
+    this.modules.events.emit('disableLineNumbers', flag);
   }
 }
 
