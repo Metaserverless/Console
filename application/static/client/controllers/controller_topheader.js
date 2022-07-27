@@ -52,14 +52,14 @@ class controllerTopHeader {
             sub_menu: true,
             sub_items: [
               {
-                title: 'example-sub-menu',
+                title: 'example',
                 shortcut: 'Ctrl+I',
               },
               {
                 type: 'divider',
               },
               {
-                title: 'example-sub-menu2',
+                title: 'example',
                 shortcut: 'Ctrl+O',
               },
             ]

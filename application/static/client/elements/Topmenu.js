@@ -1,5 +1,16 @@
 import Submenu from "./Submenu.js";
 
+function getItems(acc, fields) {
+  const {items} = fields;
+  const getGroupSubItems = (item) => {
+      if(item.sub_items) {
+        acc[item.action] = item.sub_items;
+      }
+  } 
+  items.forEach(getGroupSubItems);
+  return acc
+};
+
 class Topmenu {
   constructor(id, modules, items) {
     this.id = id;
@@ -7,15 +18,7 @@ class Topmenu {
     this.items = items;
     this.menu = document.getElementById(id);
     // this.menu.addEventListener('click', this.onClick.bind(this));
-    this.sub_menu_items = this.items.reduce((acc, fields) => {
-        const {items} = fields;
-        items.forEach((item) => {
-          if(item.sub_items) {
-            acc[item.action] = item.sub_items
-          }
-        })
-        return acc
-    }, {})
+    this.sub_menu_items = this.items.reduce((getItems), {})
     console.log(this.sub_menu_items);
     this.call_sub_menu = {
       'export': ($root, fields=['filed1', 'field2', 'field3']) => new Submenu($root, fields),

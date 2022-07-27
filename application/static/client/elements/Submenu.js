@@ -15,13 +15,13 @@ class Submenu {
       this.$root = $root;
       this.fields = fields;
       this.$submenu = document.createElement('div');
-      this.$submenu.classList.add('sub_menu-fields')
+      this.$submenu.classList.add('sub_menu-fields');
       this.$list_fields = document.createElement('ul');
-      this.$list_fields.innerHTML = this.fields.map((field) => `<li>${field.title}</li>`).join('');
+      this.$list_fields.innerHTML = this.fields.map((field) => 
+        `${field.title ? `<li><p>${field.title}</p> ${field.shortcut ? `<p>${field.shortcut}</p>` : ''}</li>` : ''}
+        ${field.type === "divider" ? `<div class="menu-item-items-divider"></div>` : ""}
+      `).join('');
       this.$submenu.append(this.$list_fields);
-
-
-
       this.$submenu.addEventListener('mouseenter', this.onMouseEnter.bind(this));
       this.$root.addEventListener('mouseleave', this.onMouseLeave.bind(this));
   

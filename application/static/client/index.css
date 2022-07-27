@@ -172,9 +172,9 @@ button:hover{
  background: var(--main-bg-color);
  font-size: 80%;
  left:195px;
- width:195px;
+ min-width:195px;
  border: var(--main-border);
-
+z-index: 10;
 }
 
 .sub_menu-fields ul {
@@ -184,21 +184,27 @@ button:hover{
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  flex-grow: 1;
+  min-width: 195px;
 }
 .sub_menu-fields ul li{
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
   list-style: none;
-  text-align: left;
   font-size: 1.38em;
-  margin: 0 5px;
-  padding: 5px 10px;
   font-weight: 300;
-  width: 100%;
   border-bottom:#fff;
   border-width: 190px ;
   border-radius: 2px;
+  width: 100%;
 }
 
+.sub_menu-fields ul li p {
+  margin: 5px;
+}
+.sub_menu-fields ul .menu-item-items-divider {
+  margin: 3px;
+}
 .sub_menu-fields.active {
   display: block;
  }
