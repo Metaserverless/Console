@@ -139,19 +139,21 @@ class BaseCodeEditor {
       'open:source:file',
       this.openSourceFile.bind(this)
     );
-    this.modules.events.listen(
-      'disableLineNumbers',
-      this.displayLineNumbers.bind(this)
-    );
+
+    if (this.modules.store.get('disableLineNumbers', true) == true) this.editor.setOption('lineNumbers', !this.editor.getOption('lineNumbers'));
+
+    this.modules.events.listen('Ctrl+l', () => {
+      this.editor.setOption('lineNumbers', !this.editor.getOption('lineNumbers'));
+      this.modules.store.set('disableLineNumbers', !this.editor.getOption('lineNumbers'), true);
+    });
+
+
   }
 
   setValue(text) {
     this.editor.setValue(text);
   }
 
-   displayLineNumbers() {
-    this.editor.setOption('lineNumbers', !this.modules.store.get('displayLineNumbers'));
-  }
   valueChanged(cm, change) {
 
     // console.log(this.node);
