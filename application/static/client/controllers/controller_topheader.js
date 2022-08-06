@@ -197,6 +197,11 @@ class controllerTopHeader {
       this.switchCssTheme.bind(this)
     );
     this.elements.cssThemeSwitcher.dispatchEvent(new Event('change'));
+
+    this.modules.events.listen('Ctrl+l', ()=>this.toggleLineNumbers(true));
+    const storedFromLastSession  = this.modules.store.get('displayLineNumbers', true);
+    if (storedFromLastSession === false) this.toggleLineNumbers(false);
+    else this.modules.store.set('displayLineNumbers', true, true);
   }
 
   switchCssTheme() {
@@ -208,6 +213,14 @@ class controllerTopHeader {
 
   action(type) {
     this.modules.events.emit(type, {});
+  }
+
+  toggleLineNumbers(storeChanges) {
+    this.modules.events.emit('toggleLineNumbers');
+    if (storeChanges) {
+      const storedFromLastSession  = this.modules.store.get('displayLineNumbers', true);
+      this.modules.store.set('displayLineNumbers', !storedFromLastSession, true);
+    }
   }
 }
 

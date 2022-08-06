@@ -18,6 +18,13 @@ const keyboard = {
     // },
     {
       ctrlKey: true,
+      keyCode: 76,
+      // key: 'l',
+      event: 'Ctrl+l'
+    },
+
+    {
+      ctrlKey: true,
       shiftKey: true,
       keyCode: 83,
       // key: 'S',
