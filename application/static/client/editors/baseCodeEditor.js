@@ -139,6 +139,10 @@ class BaseCodeEditor {
       'open:source:file',
       this.openSourceFile.bind(this)
     );
+
+    this.modules.events.listen('toggleLineNumbers', () => {
+      this.editor.setOption('lineNumbers', !this.editor.getOption('lineNumbers'));
+    });
   }
 
   setValue(text) {

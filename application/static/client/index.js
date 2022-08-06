@@ -68,7 +68,7 @@ const dm = {
     dialogs.init();
     this.tooltip = new Tooltip();
 
-    this.controllerTopHeader = new controllerTopHeader('top-header', modules);
+
     this.controllerActivityBar = new controllerActivityBar(
       'activity-bar',
       modules
@@ -90,6 +90,8 @@ const dm = {
     this.controllerDiagram = new controllerDiagram('diagram-view', modules);
     this.controllerTable = new controllerTable('table-view', modules);
     this.controllerTerminal = new controllerTerminal('terminal', modules);
+
+    this.controllerTopHeader = new controllerTopHeader('top-header', modules);
 
     router.init();
 
