@@ -354,35 +354,37 @@ button:hover{
 .jstree-node[changed='true'] .jstree-anchor {
   color: var(--light-orange-color);
 }
-/*
+
 .vakata-context,
 .vakata-context ul {
-  background-color: var(--main-bg-color);
-  color: var(--main-text-color);
+    padding: 0.6em 0;
+	background: var(--main-bg-color);
+    border-radius: 0.5rem;
+	border: var(--main-border);
+	box-shadow: none;
+	color: var(--main-text-color);
 }
-.vakata-context i,
-.vakata-context span {
-  display: none !important;
+.vakata-context li>a {
+    padding: 0.3em 1.4em;
+    color: inherit;
+    line-height: 1.6em;
+    text-shadow: none;
+    border-radius: 0;
 }
-.vakata-context a {
-  padding: 0.5em 1em !important;
-  line-height: normal !important;
-  color: var(--main-text-color) !important;
-
-  text-shadow: none !important;
+.vakata-context .vakata-context-hover>a,
+.vakata-context li>a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: none;
 }
-.vakata-context li > a:hover {
-  background-color: var(--light-bg-color) !important;
-  color: var(--main-text-color) !important;
+.vakata-context li>a>i,
+.vakata-context li>a .vakata-contextmenu-sep {
+    display: none;
 }
-.vakata-context .vakata-context-separator > a,
-.vakata-context .vakata-context-separator > a:hover {
-  line-height: normal;
-  background: var(--main-text-color) !important;
-  border: none !important;
-  box-shadow: none !important;
-  height: 1px !important;
-} */
+.vakata-context .vakata-context-separator>a,
+.vakata-context .vakata-context-separator>a:hover {
+	max-width: 90%;
+    margin: .6em auto;
+}
 
 /* END JSTREE */
 
