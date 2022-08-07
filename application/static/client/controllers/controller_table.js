@@ -71,7 +71,7 @@ class controllerTable {
   async select(name) {
     if (name == this.selected) return;
     this.selected = name;
-    const divs = this.elements.entitiesList.querySelectorAll('div');  
+    const divs = this.elements.entitiesList.querySelectorAll('div');
     for (let div of divs) {
       if (div.innerHTML == name) div.classList.add('active');
       else div.classList.remove('active');
