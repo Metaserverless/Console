@@ -369,6 +369,7 @@ button:hover{
 
 .vakata-context,
 .vakata-context ul {
+
   padding: 0.6em 0;
 	background: var(--main-bg-color);
     border-radius: 0.5rem;
@@ -377,6 +378,7 @@ button:hover{
 	color: var(--main-text-color);
 }
 .vakata-context li>a {
+
   padding: 0.3em 1.4em;
   color: inherit;
   line-height: 1.6em;
@@ -396,6 +398,7 @@ button:hover{
 .vakata-context .vakata-context-separator>a:hover {
 max-width: 90%;
   margin: .6em auto;
+
 }
 
 /* END JSTREE */

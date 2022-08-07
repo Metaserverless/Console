@@ -6,7 +6,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Sliding Panels Test</title>
     <link rel="icon" href="/favicon.png" sizes="any" type="image/png">
+
     <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous"> -->
+
 
     <style type="text/css">
         :root {
@@ -174,6 +176,7 @@
             justify-content: center;
         }
 
+
         .offcanvas-header {
             display: flex;
             align-items: center;
@@ -190,6 +193,7 @@
         .text-end {
             text-align: right!important;
         }
+
 
     </style>
 
@@ -208,7 +212,9 @@
                     <div class="offcanvas-header">
                         <div class="offcanvas-title">Top</div>
                         <div>
+
                             <button type="button" onclick="sp.fixedOffcanvas('top')">f</button>
+
                             <button type="button" onclick="sp.openOffcanvas('top', false)">x</button>
                         </div>
 
@@ -232,7 +238,9 @@
                         <div class="offcanvas-header">
                             <div class="offcanvas-title">Start</div>
                             <div>
+
                                 <button type="button" onclick="sp.fixedOffcanvas('start')">f</button>
+
                                 <button type="button" onclick="sp.openOffcanvas('start', false)">x</button>
                             </div>
 
@@ -258,8 +266,10 @@
                     <div>system-center-center</div>
                  </div>    -->
                     <div>
+
                         <button onclick="sp.openOffcanvas()">Open All</button>show: <span id="global.show"></span>
                         <button onclick="sp.fixedOffcanvas()">Fixed All</button>fixed: <span id="global.fixed"></span>
+
                     </div>
                     <div>
 
@@ -286,7 +296,9 @@
                         <div class="offcanvas-header">
                             <div class="offcanvas-title">End</div>
                             <div>
+
                                 <button type="button" onclick="sp.fixedOffcanvas('end')">f</button>
+
                                 <button type="button" onclick="sp.openOffcanvas('end', false)">x</button>
                             </div>
                         </div>
@@ -309,7 +321,9 @@
                     <div class="offcanvas-header">
                         <div class="offcanvas-title">Bottom</div>
                         <div>
+
                             <button type="button" onclick="sp.fixedOffcanvas('bottom')">f</button>
+
                             <button type="button" onclick="sp.openOffcanvas('bottom', false)">x</button>
                         </div>
                     </div>
