@@ -1,4 +1,5 @@
 /* eslint-disable */
+import Topmenu from "../elements/Topmenu.js";
 
 class controllerActivityBar {
   constructor(id, modules) {
@@ -88,6 +89,7 @@ class controllerActivityBar {
             section: 'extensions',
             shortcut: 'Ctrl+Shift+X',
           },
+          
           {
             type: 'divider',
           },
@@ -108,31 +110,13 @@ class controllerActivityBar {
         return item.divider ?
           '<div class="activity-bar-divider"></div>' :
           `<div class="activity-bar-button" data-section="${item.section}"><i class="${item.icon} tooltip-horizontal" data-title="${item.text}"></i>` +
-          (item.items ?
-            `<div class="menu-item-items">` +
-            item.items
-            .map((subItem) => {
-              return (
-                `<div class="menu-item-item">` +
-                (subItem.type == 'divider' ?
-                  `<div class="menu-item-items-divider"></div>` :
-                  `<div class="menu-item-item-title" data-section="${
-                              subItem.section
-                            }"><div>${subItem.title}</div><div>${
-                              subItem.shortcut || ''
-                            }</div></div>`) +
-                `</div>`
-              );
-            })
-            .join('') +
-            `</div>` :
-            '') +
+          (item.items ? Topmenu.generateItemsHtml(item.items, 1) : '') +
           `</div>`;
       })
       .join('');
 
     this.elements.activityBar
-      .querySelectorAll('.menu-item-items')
+      .querySelectorAll('.menu-items-list-1')
       .forEach((item) => {
         item.addEventListener('mouseleave', (e) => {
           e.target.classList.remove('active');
@@ -140,7 +124,7 @@ class controllerActivityBar {
       });
 
     this.elements.activityBar
-      .querySelectorAll('.menu-item-item-title')
+      .querySelectorAll('.menu-items-list-button')
       .forEach((item) => {
         item.addEventListener('click', (e) => {
           const section =
@@ -160,7 +144,7 @@ class controllerActivityBar {
           } else if (section == 'manage') {
             // console.log('manage');
             e.currentTarget
-              .querySelector('.menu-item-items')
+              .querySelector('.menu-items-list-1')
               .classList.toggle('active');
           } else {
             this.selectItem(i);
