@@ -22,6 +22,7 @@ class controllerTable {
       ),
       closeBtn: codeEditorContainer.querySelector('.code-editor-close-button'),
       openBtn: codeEditorContainer.querySelector('.code-editor-open-button'),
+      deleteButton: '<td style="width: 30px; padding: 0px;"><button class="entity-table-body_button">Delete</button></td>',
     };
 
     this.codeEditor = new codeEditor('table-code-editor', modules, this.view, {
@@ -37,14 +38,17 @@ class controllerTable {
     this.elements.closeBtn.addEventListener('click', () =>
       this.showCodeEditor(false)
     );
-
+    
+    this.crudJson = null
     this.modules.events.listen(
       'code:editor:change',
       (node) => {
-        if (node.type == 'postgres' || node.type == 'redis') this.сodeEditorChanged(node)
+        if (node.type == 'postgres' || node.type == 'redis') {
+          this.сodeEditorChanged(node);
+          this.crudJson = JSON.parse(node.original.source);
+        }
       }
     );
-
 
 
     this.elements.entitiesList.addEventListener(
@@ -67,7 +71,7 @@ class controllerTable {
   async select(name) {
     if (name == this.selected) return;
     this.selected = name;
-    const divs = this.elements.entitiesList.querySelectorAll('div');
+    const divs = this.elements.entitiesList.querySelectorAll('div');  
     for (let div of divs) {
       if (div.innerHTML == name) div.classList.add('active');
       else div.classList.remove('active');
@@ -87,7 +91,6 @@ class controllerTable {
       this.elements.entityTableHeader.innerHTML = '<tr><td>No data</td></tr>';
       return;
     }
-    // // const table = data.result.map(row => `<div>${row.id}</div>`).join('');
     const header =
       '<tr>' +
       Object.keys(data.result[0])
@@ -95,15 +98,133 @@ class controllerTable {
       .join('') +
       '</tr>';
     this.elements.entityTableHeader.innerHTML = header;
-    const body = data.result
+
+    let body;
+    if(this.crudJson[name].includes('delete')){
+      body = this.isDelete(data.result);
+    } else {
+      body = data.result
       .map(
-        (row) =>
-        `<tr>${Object.values(row)
-            .map((value) => `<td>${value}</td>`)
-            .join('')}</tr>`
-      )
-      .join('');
+        (row) => `<tr>
+                    ${Object.values(row).map((value) => `<td data-type="${typeof value}">${value}</td>`).join('')}
+                  </tr>`
+        ).join('');
+    }
     this.elements.entityTableBody.innerHTML = body;
+    this.isUpdate(name);
+    this.isCreate(data.result,name);
+  }
+
+  isUpdate(name){
+    if(this.crudJson[name].includes('update')){
+      this.elements.entityTableBody.ondblclick = function(e) {
+        if(e.target.tagName === "BUTTON") return;
+
+        if(e.target.tagName === "INPUT"){
+          const value = e.target.value;
+          // here we need to make query that update row
+          const type = e.target.getAttribute('type');
+          e.path[1].outerHTML = `<td data-type="${type}">${value}</td>`;
+          return;          
+        }
+
+        if(e.target.tagName === "TD"){
+          const type = e.target.getAttribute('data-type');
+          const text = e.target.textContent;
+          const width = e.target.offsetWidth;
+          e.target.outerHTML = `<td style="width: ${width}px; padding: 0px;">
+                                  <input ${type === "number" ? "type='number'" : ""} value="${text}"></input>
+                                </td> `;
+        }
+      };
+    }
+  }
+
+  isCreate(rows, name) {
+    if(this.crudJson[name].includes('create')){
+      const maxId = Math.max(...rows.map(row => row[name.toLowerCase() + 'Id']));
+      const ths = this.elements.entityTableHeader.firstChild.children;
+      const lastTr = this.elements.entityTableBody.lastChild.children;
+      
+      const inputs = [];
+      for(let i = 0; i < ths.length; i++){
+        const type = lastTr[i].getAttribute('data-type')
+        if(i === 0){
+          inputs.push(`<td data-type="${type}" style="width: ${ths[i].offsetWidth}px;">${maxId + 1}</td>`);
+          continue;
+        }
+        inputs.push(`<td style="width: ${ths[i].offsetWidth}px; padding: 0px;">
+                       <input type="${type}"></input>
+                     </td>`);
+      }
+      inputs.push(`<td style="width: 30px; padding: 0px;">
+                     <button id="insert" class="entity-table-body_button">Insert</button>
+                   </td>`);
+      const tr = document.createElement('tr');
+      tr.innerHTML = inputs.join('');
+      this.elements.entityTableBody.append(tr);
+
+      const insert = document.getElementById('insert');
+      insert.addEventListener('click', (e) => {
+        const amountTrs = this.elements.entityTableBody.children.length;
+        const insertTr = this.elements.entityTableBody.children[amountTrs - 1];
+        const tds = insertTr.children;
+        
+        // get input data
+        const values = []; 
+        for(let i = 0; i < tds.length - 1; i++){
+          if(tds[i].children[0]){
+            const type = tds[i].children[0].getAttribute('type');
+            const value = tds[i].children[0].value;  
+            values.push({type, value});
+            continue;
+          }
+          const type = tds[i].getAttribute('data-type');
+          const value = tds[i].textContent;
+          values.push({type, value});
+        }
+
+        // insert new tr to table
+        const newTr = document.createElement('tr');
+        const newTds = values.map((value) => `<td data-type="${value.type}">${value.value}</td>`);
+        if(this.crudJson[name].includes('delete')) newTds.push(this.elements.deleteButton);
+        newTr.innerHTML = newTds.join('');
+        // make insert query to data base
+        this.elements.entityTableBody.insertBefore(newTr, insertTr);
+
+        // reset existing data
+        for(let i = 1; i < tds.length - 1; i++){
+          if(tds[i].children[0]){
+            tds[i].children[0].value = '';
+            continue;
+          }
+          const width = ths[i].offsetWidth;
+          const type = tds[i].getAttribute('data-type');
+          const newInput = `<td style="width: ${width}px; padding: 0px;"><input type="${type}" /></td>`;
+          tds[i].outerHTML = newInput;
+        }
+        tds[0].innerHTML = +values[0].value + 1; 
+      })
+    }
+  }
+
+  isDelete(rows) {
+    this.elements.entityTableBody.onclick = function(e) {
+      if(e.target.tagName === 'BUTTON'){
+        if(e.target.textContent === 'Delete'){
+          if(confirm(`Delete row with Id ${e.path[2].children[0].textContent}?`)){
+            // make delete query after confirm
+            e.path[2].remove();
+          }
+        }
+      }
+    };
+    return rows.map(
+          (row) => `<tr>
+                      ${Object.values(row).map((value) => `<td data-type="${typeof value}">${value}</td>`).join('')}
+                      ${this.elements.deleteButton}
+                    </tr>`
+          ).join('');
   }
 
   clearScreen(){
@@ -133,7 +254,6 @@ class controllerTable {
     // console.log(value);
     let json = {};
     try {
-
       json = JSON.parse(value);
       // console.log(json)
 
