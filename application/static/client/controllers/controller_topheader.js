@@ -49,8 +49,23 @@ class controllerTopHeader {
           },
           {
             title: 'Export',
-            action: 'export',
-            shortcut: 'Ctrl+E',
+            // action: 'export',
+            // shortcut: 'Ctrl+E',
+            items:[
+              {
+                title: 'Submenu Test 1',
+                action: 'Submenu Test 1',
+                shortcut: 'Ctrl+E'
+              },
+              {
+                type: 'divider',
+              },
+              {
+                title: 'Submenu Test 2',
+                action: 'Submenu Test 2',
+                shortcut: 'Ctrl+E'
+              }
+            ]
           },
           {
             title: 'Import',
