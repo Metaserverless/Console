@@ -26,6 +26,7 @@ import controllerImage from './controllers/controller_image.js';
 import controllerDiagram from './controllers/controller_diagram.js';
 import controllerTable from './controllers/controller_table.js';
 import controllerTerminal from './controllers/controller_terminal.js';
+import slidingPanels from './controllers/controller_slidingpanels.js';
 //  import css_themes from './system/css_themes.js';
 
 //  const api = window.api;
@@ -68,7 +69,7 @@ const dm = {
     dialogs.init();
     this.tooltip = new Tooltip();
 
-
+    this.controllerSlidingPanels = new slidingPanels(modules);
     this.controllerActivityBar = new controllerActivityBar(
       'activity-bar',
       modules

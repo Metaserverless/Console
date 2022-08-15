@@ -217,6 +217,20 @@ class controllerTopHeader {
     const storedFromLastSession  = this.modules.store.get('displayLineNumbers', true);
     if (storedFromLastSession === false) this.toggleLineNumbers(false);
     else this.modules.store.set('displayLineNumbers', true, true);
+
+    this.displayTop = true;
+    this.displayLeft = true;
+    this.fullScren = true;
+
+    this.modules.events.listen('Ctrl+y', () =>
+      this.openInFullScreen('top', this.displayTop),
+    );
+    this.modules.events.listen('Ctrl+e', () =>
+      this.openInFullScreen('left', this.displayLeft),
+    );
+    this.modules.events.listen('Ctrl+Shift+E', () =>
+      this.openInFullScreen('top+left', this.fullScren),
+    );
   }
 
   switchCssTheme() {
@@ -235,6 +249,24 @@ class controllerTopHeader {
     if (storeChanges) {
       const storedFromLastSession  = this.modules.store.get('displayLineNumbers', true);
       this.modules.store.set('displayLineNumbers', !storedFromLastSession, true);
+    }
+  }
+
+  openInFullScreen(type, state) {
+    switch (type) {
+      case 'top':
+        this.modules.events.emit('setTop', !state);
+        return (this.displayTop = !this.displayTop);
+      case 'left':
+        this.modules.events.emit('setLeft', !state);
+        return (this.displayLeft = !this.displayLeft);
+      default:
+        this.modules.events.emit('setTopAndLeft', !state);
+        return (
+          (this.displayTop = !state),
+          (this.displayLeft = !state),
+          (this.fullScren = !state)
+        );
     }
   }
 }
