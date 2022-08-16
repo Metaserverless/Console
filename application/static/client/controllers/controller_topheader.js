@@ -161,9 +161,9 @@ class controllerTopHeader {
       {
         title: 'View',
         items: [{
-          title: 'Placeholder',
-          action: 'placeholder',
-          shortcut: 'Ctrl+Shift+P',
+          title: 'Line numbers',
+          action: 'Ctrl+l',
+          shortcut: 'Ctrl+L',
         }, ],
       },
       {

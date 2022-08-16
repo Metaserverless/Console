@@ -3,10 +3,10 @@
   --darker-bg-color: #252526;
   --light-bg-color: #69676b;
   --main-text-color: white;
-  --light-green-color: #00ff00;
-  /*#00e60a */
-  --dark-blue-color: #009900;
-  /*#038f0a*/
+
+  --light-green-color: #00ff00; /*#00e60a */
+  --dark-green-color: #009900; /*#038f0a*/
+
   --dark-blue-color: #005c99;
   --light-blue-color: #1c609c;
   --hover-blue-color: #2274bb;
@@ -61,6 +61,7 @@ input::file-selector-button {
   /* padding: 0.25em 0.1em; */
   padding-left: 0.5em;
   padding-right: 0.5em;
+  cursor: pointer;
 }
 
 button:hover {
@@ -128,10 +129,12 @@ button:hover {
 .menu-item.active .menu-items-list-1,
 .menu-items-list-1.active,
 .menu-items-list-button.active .menu-items-list-2,
-.menu-items-list-2.active {
+
+.menu-items-list-2.active  {
   display: flex;
   opacity: 1;
 }
+
 
 .menu-items-list-1,
 .menu-items-list-2 {
@@ -152,7 +155,7 @@ button:hover {
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
   border: var(--main-border);
-  cursor: auto;
+  cursor:auto;
 }
 
 .menu-items-list-2 {
@@ -386,11 +389,13 @@ button:hover {
 .vakata-context ul {
 
   padding: 0.6em 0;
+
   background: var(--main-bg-color);
   border-radius: 0.5rem;
   border: var(--main-border);
   box-shadow: none;
   color: var(--main-text-color);
+
 }
 
 .vakata-context li>a {
@@ -415,6 +420,7 @@ button:hover {
 
 .vakata-context .vakata-context-separator>a,
 .vakata-context .vakata-context-separator>a:hover {
+
   max-width: 90%;
   margin: .6em auto;
 
@@ -632,7 +638,13 @@ table {
 }
 
 #entities-list div {
-  padding: 0.7rem;
+  /* padding: 0.7rem; */
+  height: 45px;
+  padding: 0px 0.7em 0px 0.7em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   border-right: var(--main-border);
   border-bottom: var(--main-border);
   border-left: var(--main-border);
@@ -647,8 +659,10 @@ table {
 #entity-table-container {
   flex-grow: 1;
   padding-left: 2rem;
-  max-height: 100%;
-  overflow-y: auto;
+  height: 85vh;
+  overflow: auto;
+  /* max-height: 100%;
+  overflow-y: auto; */
   /* background:green; */
 }
 
@@ -658,12 +672,60 @@ table {
   border-bottom: var(--main-border);
 }
 
-#entity-table th,
-#entity-table td {
-  padding: 0.7rem;
+#entity-table input {
+  width: 100%;
+  height: 100%;
+
+  padding-left: 0.7em;
+
+  border: 0;
+  background:var(--light-bg-color);
+  font-size: 16px;
+}
+
+#entity-table td,
+#entity-table th  {
+  height: 2.9em;
+  padding: 0px 0.7em;
+  /* padding: 0.7rem; */
   border-top: var(--main-border);
   border-right: var(--main-border);
   text-align: left;
+}
+
+#entity-table .entity-table-body-button-delete-td, #entity-table .entity-table-body-button-insert-td{
+  width: 2em;
+  padding: 0;
+}
+
+#entity-table .entity-table-body-button-delete-td button, #entity-table .entity-table-body-button-insert-td button{
+  width: 100%;
+  height: 100%;
+}
+
+#entity-table .entity-table-body-button-insert-td button{
+  background-color: var(--dark-green-color);
+}
+
+#entity-table-body tr {
+  border: var(--main-border);
+}
+
+#entity-table .entity-table-body-row-insert td{
+  padding: 0;
+  border-right: 1px solid rgb(255, 255, 255, 0.35);
+}
+
+#entity-table .entity-table-body-row-insert td:nth-last-child(-n+2){
+  border-right: none;
+}
+
+#entity-table-update-input{
+  /* margin: 0 -0.7em 0 -0.7em; */
+}
+#entity-table input{
+  outline: none;
+  /* border: 1px inset #ccc; */
 }
 
 /* FORMS */
