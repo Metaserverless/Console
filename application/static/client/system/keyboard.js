@@ -22,7 +22,25 @@ const keyboard = {
       // key: 'l',
       event: 'Ctrl+l'
     },
-
+     {
+      ctrlKey: true,
+      shiftKey: true,
+      keyCode: 69,
+      // key: 'N',
+      event: 'Ctrl+Shift+E',
+    },
+    {
+      ctrlKey: true,
+      keyCode: 69,
+      // key: 'n',
+      event: 'Ctrl+e',
+    },
+    {
+      ctrlKey: true,
+      keyCode: 89,
+      // key: 't',
+      event: 'Ctrl+y',
+    },
     {
       ctrlKey: true,
       shiftKey: true,

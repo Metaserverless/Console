@@ -52,26 +52,43 @@
 
 <body style="background:#000000;">
   <div id="app">
-    <div id="top-header">
-      <div id="top-logo">
-        <img id="top-logo-image" src="client/img/logo.png" alt="Metactos Logo">
+    <div class="system-offpanels-container top">
+        <div class="system-offpanels-inner-container top" >
+          <div id="top-header" class="system-offpanels top">
+            <div id="top-logo">
+              <img
+                id="top-logo-image"
+                src="client/img/logo.png"
+                alt="Metactos Logo"
+              />
+            </div>
+            <div id="top-menu"></div>
+            <div style="flex-grow: 1"></div>
+            <div><select id="css-theme-switcher"></select></div>
+          </div>
+        </div>
       </div>
-      <div id="top-menu"></div>
-      <div style="flex-grow:1"></div>
-      <div><select id="css-theme-switcher"></select></div>
-    </div>
     <div id="main-screen">
-      <div id="activity-bar"></div>
-
-      <div id="side-bar">
-        <div id="jstree_search_container">
-          <input id="jstree_search" type="text" />
-          <i class="fas fa-search"></i>
+     <div class="system-offpanels-container start">
+          <div
+            class="system-offpanels-inner-container start"
+          >
+            <div id="leftColumns">
+              <div id="activity-bar"></div>
+              <div id="side-bar">
+                <div id="jstree_search_container">
+                  <input id="jstree_search" type="text" />
+                  <i class="fas fa-search"></i>
+                </div>
+                <div
+                  id="side-bar-sections"
+                  style="height: 100%"
+                  class="side-bar-sections"
+                ></div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div id="side-bar-sections" class="side-bar-sections">
-
-        </div>
-      </div>
 
       <div id="right-column">
         <div id="router-view">
