@@ -164,7 +164,26 @@ class controllerTopHeader {
           title: 'Line numbers',
           action: 'Ctrl+l',
           shortcut: 'Ctrl+L',
-        }, ],
+        },
+        {
+          type: 'divider',
+        },
+        {
+          title: 'Left panels',
+          action: 'Ctrl+e',
+          shortcut: 'Ctrl+E',
+        },
+        {
+          title: 'Top menu',
+          action: 'Ctrl+y',
+          shortcut: 'Ctrl+Y',
+        },
+        {
+          title: 'Full screen',
+          action: 'Ctrl+Shift+E',
+          shortcut: 'Ctrl+Shift+E',
+        },
+      ],
       },
       {
         title: 'Run',
