@@ -7,4 +7,7 @@ node_modules
 .DS_Store
 data/
 /application/api/extensions
+/application/api/tenant2.1
+/application/api/tenant4.1
 /application/static/extensions
+
