@@ -164,6 +164,7 @@ class controllerTopHeader {
           title: 'Line numbers',
           action: 'Ctrl+l',
           shortcut: 'Ctrl+L',
+
         },
         {
           type: 'divider',
@@ -184,6 +185,7 @@ class controllerTopHeader {
           shortcut: 'Ctrl+Shift+E',
         },
       ],
+
       },
       {
         title: 'Run',
